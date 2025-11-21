@@ -103,7 +103,11 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Gradient text - Celeste pastel a rosa pastel */
 .gradient-text {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-[#8CCFE0] to-[#E9A5B4];
+  background: linear-gradient(to right, #8CCFE0, #E9A5B4);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
 /* Hover effects */

@@ -29,9 +29,9 @@ export function Header() {
           <img src="/logo.png" alt="Peque Diario" width={40} height={40} />
           
           <div className="flex flex-col">
-            <h1 className="text-base sm:text-xl font-bold">
-              <span className="bg-gradient-to-r from-[#8CCFE0] to-[#E9A5B4] bg-clip-text text-transparent">Peque</span>
-              <span className="text-[#1E293B]">Diario</span>{' '}
+            <h1 className="text-base sm:text-xl font-extrabold">
+              <span className="bg-gradient-to-r from-[#8CCFE0] to-[#E9A5B4] bg-clip-text text-transparent">Peque</span>{' '}
+              <span className="text-[#1E293B]">Diario</span>
             </h1>
             <p className="text-xs text-gray-600 hidden sm:block">Acompañando el crecimiento de tu hijo</p>
           </div>

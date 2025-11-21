@@ -53,11 +53,9 @@ export default function Home() {
               </span>
             </div>
             
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold gradient-text mb-6">
-              Peque{' '}
-              <span className="text-gray-700">
-                Diario
-              </span>
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold  mb-6">
+              <span className="bg-gradient-to-r from-[#8CCFE0] to-[#E9A5B4] bg-clip-text text-transparent">Peque</span>{' '}
+              <span className="text-[#1E293B]">Diario</span>{' '}
             </h1>
             
             <p className="text-xl md:text-2xl lg:text-3xl text-gray-700 mb-10 max-w-3xl mx-auto leading-relaxed font-light">
