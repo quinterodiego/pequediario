@@ -1,4 +1,5 @@
 import { google } from 'googleapis'
+import bcrypt from 'bcryptjs'
 
 // Función para formatear correctamente la clave privada
 function formatPrivateKey(key: string | undefined): string | undefined {
@@ -35,8 +36,14 @@ export class GoogleSheetsService {
     name: string
     image?: string
     isPremium?: boolean
+    password?: string
   }) {
     try {
+      // Hashear contraseña si se proporciona
+      const hashedPassword = userData.password 
+        ? await bcrypt.hash(userData.password, 10)
+        : ''
+
       const values = [
         [
           new Date().toISOString(),
@@ -45,12 +52,13 @@ export class GoogleSheetsService {
           userData.image || '',
           userData.isPremium || false,
           '', // País (opcional)
+          hashedPassword, // Contraseña hasheada (columna G)
         ]
       ]
 
       await sheets.spreadsheets.values.append({
         spreadsheetId: SPREADSHEET_ID,
-        range: 'Usuarios!A:F',
+        range: 'Usuarios!A:G',
         valueInputOption: 'RAW',
         requestBody: { values },
       })
@@ -69,11 +77,12 @@ export class GoogleSheetsService {
     isPremium: boolean
     name?: string
     image?: string
+    passwordHash?: string
   }> {
     try {
       const response = await sheets.spreadsheets.values.get({
         spreadsheetId: SPREADSHEET_ID,
-        range: 'Usuarios!B:F', // B=Email, C=Nombre, D=Imagen, E=Premium, F=País
+        range: 'Usuarios!B:G', // B=Email, C=Nombre, D=Imagen, E=Premium, F=País, G=Password
       })
 
       const rows = response.data.values
@@ -86,6 +95,8 @@ export class GoogleSheetsService {
       // row[1] = Nombre (columna C)
       // row[2] = Imagen (columna D)
       // row[3] = Premium (columna E)
+      // row[4] = País (columna F)
+      // row[5] = Password (columna G)
       const userRowIndex = rows.findIndex((row, index) => index > 0 && row[0] === email)
       
       if (userRowIndex === -1) {
@@ -93,16 +104,63 @@ export class GoogleSheetsService {
       }
 
       const userRow = rows[userRowIndex]
+      // Verificar Premium de forma estricta: solo true si es explícitamente true, "TRUE", "true", o 1
+      const premiumValue = userRow[3]
+      const isPremium = premiumValue === true || 
+                       premiumValue === 'TRUE' || 
+                       premiumValue === 'true' || 
+                       premiumValue === 1 || 
+                       premiumValue === '1'
+      
       return {
         exists: true,
         rowIndex: userRowIndex, // Índice en el array (0=header, 1=primer usuario)
-        isPremium: Boolean(userRow[3]),
+        isPremium: Boolean(isPremium),
         name: userRow[1],
         image: userRow[2],
+        passwordHash: userRow[5] || undefined,
       }
     } catch (error) {
       console.error('Error verificando usuario:', error)
       return { exists: false, rowIndex: -1, isPremium: false }
+    }
+  }
+
+  // Verificar credenciales de usuario (email y contraseña)
+  static async verifyCredentials(email: string, password: string): Promise<{
+    valid: boolean
+    user?: {
+      email: string
+      name?: string
+      image?: string
+      isPremium: boolean
+    }
+  }> {
+    try {
+      const user = await this.getUserByEmail(email)
+      
+      if (!user.exists || !user.passwordHash) {
+        return { valid: false }
+      }
+
+      const isPasswordValid = await bcrypt.compare(password, user.passwordHash)
+      
+      if (!isPasswordValid) {
+        return { valid: false }
+      }
+
+      return {
+        valid: true,
+        user: {
+          email,
+          name: user.name,
+          image: user.image,
+          isPremium: user.isPremium,
+        }
+      }
+    } catch (error) {
+      console.error('Error verificando credenciales:', error)
+      return { valid: false }
     }
   }
 

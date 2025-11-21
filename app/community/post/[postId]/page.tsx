@@ -136,10 +136,10 @@ export default function PostPage() {
 
   if (status === 'loading' || isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-900">
         <Header />
         <div className="container mx-auto px-4 py-8">
-          <div className="text-center">Cargando...</div>
+          <div className="text-center text-gray-600 dark:text-gray-400">Cargando...</div>
         </div>
       </div>
     )
@@ -150,7 +150,7 @@ export default function PostPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-900">
       <Header />
       
       <main className="container mx-auto px-3 sm:px-4 py-4 sm:py-8 max-w-4xl">
@@ -158,7 +158,7 @@ export default function PostPage() {
         <Button
           onClick={() => router.push(`/community/${post.forumId}`)}
           variant="ghost"
-          className="mb-4 sm:mb-6 px-2 sm:px-3"
+          className="mb-4 sm:mb-6 px-2 sm:px-3 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
         >
           <ArrowLeft className="sm:mr-2" size={16} />
           <span className="hidden sm:inline">Volver al Foro</span>
@@ -169,23 +169,23 @@ export default function PostPage() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-2xl p-6 shadow-lg mb-6"
+          className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg mb-6 border border-gray-200 dark:border-gray-700"
         >
           <div className="flex items-start gap-4 mb-4">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center flex-shrink-0">
+            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900 flex items-center justify-center flex-shrink-0">
               {post.userImage ? (
                 <img src={post.userImage} alt={post.userName} className="w-12 h-12 rounded-full" />
               ) : (
-                <User className="text-gray-600" size={24} />
+                <User className="text-gray-600 dark:text-gray-400" size={24} />
               )}
             </div>
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
-                <span className="font-semibold text-gray-800">{post.userName}</span>
+                <span className="font-semibold text-gray-800 dark:text-gray-100">{post.userName}</span>
                 {isPremium && (
-                  <Crown className="text-yellow-500" size={14} />
+                  <Crown className="text-yellow-500 dark:text-yellow-400" size={14} />
                 )}
-                <span className="text-sm text-gray-500">
+                <span className="text-sm text-gray-500 dark:text-gray-400">
                   {new Date(post.timestamp).toLocaleDateString('es', {
                     day: 'numeric',
                     month: 'short',
@@ -195,20 +195,20 @@ export default function PostPage() {
                   })}
                 </span>
               </div>
-              <h1 className="text-2xl font-bold text-gray-800 mb-4">
+              <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4">
                 {post.title}
               </h1>
-              <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">
+              <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed">
                 {post.content}
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-4 pt-4 border-t border-gray-100">
-            <div className="flex items-center gap-1 text-gray-500">
+          <div className="flex items-center gap-4 pt-4 border-t border-gray-100 dark:border-gray-700">
+            <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400">
               <Heart size={18} />
               <span>{post.likes}</span>
             </div>
-            <div className="flex items-center gap-1 text-gray-500">
+            <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400">
               <MessageCircle size={18} />
               <span>{comments.length} comentario{comments.length !== 1 ? 's' : ''}</span>
             </div>
@@ -220,18 +220,18 @@ export default function PostPage() {
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-blue-50 border border-blue-200 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6"
+            className="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6"
           >
             <div className="flex items-start gap-2 sm:gap-3">
-              <AlertCircle className="text-blue-600 flex-shrink-0 mt-0.5 sm:mt-1" size={18} />
+              <AlertCircle className="text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5 sm:mt-1" size={18} />
               <div className="flex-1 min-w-0">
-                <p className="text-xs sm:text-sm text-blue-800">
+                <p className="text-xs sm:text-sm text-blue-800 dark:text-blue-300">
                   <strong>Versión Gratuita:</strong> Has usado {todayCommentCount} de 3 comentarios hoy.
                   {todayCommentCount >= 3 && (
                     <Button
                       onClick={() => router.push('/premium')}
                       variant="link"
-                      className="ml-1 sm:ml-2 text-blue-600 underline p-0 h-auto text-xs sm:text-sm"
+                      className="ml-1 sm:ml-2 text-blue-600 dark:text-blue-400 underline p-0 h-auto text-xs sm:text-sm"
                     >
                       Actualiza a Premium
                     </Button>
@@ -247,12 +247,12 @@ export default function PostPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg mb-4 sm:mb-6"
+          className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg mb-4 sm:mb-6 border border-gray-200 dark:border-gray-700"
         >
-          <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-3 sm:mb-4">Escribe un comentario</h2>
+          <h2 className="text-lg sm:text-xl font-bold text-gray-800 dark:text-gray-100 mb-3 sm:mb-4">Escribe un comentario</h2>
           {error && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-2.5 sm:p-3 mb-3 sm:mb-4">
-              <p className="text-xs sm:text-sm text-red-700">{error}</p>
+            <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg p-2.5 sm:p-3 mb-3 sm:mb-4">
+              <p className="text-xs sm:text-sm text-red-700 dark:text-red-300">{error}</p>
             </div>
           )}
           <div className="space-y-3 sm:space-y-4">
@@ -265,11 +265,11 @@ export default function PostPage() {
               placeholder="Escribe tu comentario aquí..."
               rows={4}
               disabled={!isPremium && todayCommentCount >= 3}
-              className="w-full p-2.5 sm:p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed text-sm sm:text-base"
+              className="w-full p-2.5 sm:p-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 dark:disabled:bg-gray-900 disabled:cursor-not-allowed text-sm sm:text-base bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
               maxLength={500}
             />
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-gray-500 dark:text-gray-400">
                 {newComment.length}/500 caracteres
               </p>
               <Button
@@ -286,14 +286,14 @@ export default function PostPage() {
 
         {/* Lista de Comentarios */}
         <div className="space-y-3 sm:space-y-4">
-          <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-3 sm:mb-4">
+          <h2 className="text-lg sm:text-xl font-bold text-gray-800 dark:text-gray-100 mb-3 sm:mb-4">
             Comentarios ({comments.length})
           </h2>
           {comments.length === 0 ? (
-            <div className="text-center py-8 sm:py-12 bg-white rounded-xl sm:rounded-2xl shadow-lg">
-              <MessageCircle className="mx-auto text-gray-300 mb-3 sm:mb-4" size={40} />
-              <p className="text-sm sm:text-base text-gray-600">No hay comentarios aún</p>
-              <p className="text-xs sm:text-sm text-gray-500 mt-2">Sé el primero en comentar</p>
+            <div className="text-center py-8 sm:py-12 bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
+              <MessageCircle className="mx-auto text-gray-300 dark:text-gray-600 mb-3 sm:mb-4" size={40} />
+              <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">No hay comentarios aún</p>
+              <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-500 mt-2">Sé el primero en comentar</p>
             </div>
           ) : (
             <div className="space-y-3 sm:space-y-4">
@@ -303,20 +303,20 @@ export default function PostPage() {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.3, delay: index * 0.05 }}
-                  className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg"
+                  className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-200 dark:border-gray-700"
                 >
                   <div className="flex items-start gap-3 sm:gap-4">
-                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center flex-shrink-0">
+                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900 flex items-center justify-center flex-shrink-0">
                       {comment.userImage ? (
                         <img src={comment.userImage} alt={comment.userName} className="w-9 h-9 sm:w-10 sm:h-10 rounded-full" />
                       ) : (
-                        <User className="text-gray-600" size={18} />
+                        <User className="text-gray-600 dark:text-gray-400" size={18} />
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex flex-wrap items-center gap-2 mb-1 sm:mb-2">
-                        <span className="font-semibold text-gray-800 text-sm sm:text-base">{comment.userName}</span>
-                        <span className="text-xs text-gray-500 whitespace-nowrap">
+                        <span className="font-semibold text-gray-800 dark:text-gray-100 text-sm sm:text-base">{comment.userName}</span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">
                           {new Date(comment.timestamp).toLocaleDateString('es', {
                             day: 'numeric',
                             month: 'short',
@@ -326,7 +326,7 @@ export default function PostPage() {
                           })}
                         </span>
                       </div>
-                      <p className="text-sm sm:text-base text-gray-700 whitespace-pre-wrap leading-relaxed">
+                      <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed">
                         {comment.content}
                       </p>
                     </div>

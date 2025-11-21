@@ -3,7 +3,7 @@
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Button } from '../../components/ui/button'
-import { Plus, Baby, Calendar, TrendingUp, Crown, AlertCircle, Droplet, X, Eye, Search, Zap, Trophy, Lightbulb, ChevronDown, ChevronUp, Edit, Trash2, Save, Clock, FileText, Download } from 'lucide-react'
+import { Plus, Baby, Calendar, TrendingUp, Crown, AlertCircle, Droplet, X, Eye, Search, Zap, Trophy, Lightbulb, ChevronDown, ChevronUp, Edit, Trash2, Save, Clock, FileText, Download, ArrowRight } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { CalendarView } from '../../components/CalendarView'
 import { ChartsView } from '../../components/ChartsView'
@@ -105,7 +105,7 @@ export default function EsfinteresPage() {
   if (status === 'loading' || isLoading) {
     return (
       <div className="text-center py-12">
-        <div className="text-gray-600">Cargando...</div>
+        <div className="text-gray-600 dark:text-gray-400">Cargando...</div>
       </div>
     )
   }
@@ -256,9 +256,47 @@ export default function EsfinteresPage() {
 
   return (
     <div>
+      {/* Banner Premium Prominente (si no es premium) */}
+      {!isPremium && (
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 rounded-2xl p-6 shadow-xl mb-6 border-4 border-yellow-300"
+        >
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex items-start gap-4 flex-1">
+              <div className="bg-white/20 rounded-full p-3 backdrop-blur-sm">
+                <Crown className="text-white" size={32} />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">
+                  🚀 Actualiza a Premium y desbloquea todo
+                </h3>
+                <p className="text-white/95 text-sm sm:text-base mb-3">
+                  Con Premium obtienes registros ilimitados, historial completo, calendario sin límites y más funcionalidades exclusivas
+                </p>
+                <div className="flex flex-wrap gap-2 text-xs sm:text-sm text-white/90">
+                  <span className="bg-white/20 px-2 py-1 rounded">✓ {FREE_LIMIT_MONTHLY}+ registros/mes</span>
+                  <span className="bg-white/20 px-2 py-1 rounded">✓ Historial completo</span>
+                  <span className="bg-white/20 px-2 py-1 rounded">✓ Calendario ilimitado</span>
+                  <span className="bg-white/20 px-2 py-1 rounded">✓ Exportar PDF</span>
+                </div>
+              </div>
+            </div>
+            <Button
+              onClick={() => router.push('/premium')}
+              className="bg-white text-yellow-600 hover:bg-gray-100 font-bold px-6 py-3 text-base shadow-lg whitespace-nowrap"
+            >
+              Ver Premium
+              <ArrowRight className="ml-2" size={18} />
+            </Button>
+          </div>
+        </motion.div>
+      )}
+
       {/* Banner de límite alcanzado */}
       {isAtLimit && (
-        <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6 rounded">
+        <div className="bg-yellow-100 dark:bg-yellow-900/30 border-l-4 border-yellow-500 dark:border-yellow-400 text-yellow-700 dark:text-yellow-300 p-4 mb-6 rounded">
           <div className="flex items-center">
             <AlertCircle className="mr-2" size={20} />
             <div className="flex-1">
@@ -275,7 +313,7 @@ export default function EsfinteresPage() {
 
       {/* Banner de cerca del límite */}
       {isNearLimit && !isAtLimit && (
-        <div className="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-6 rounded">
+        <div className="bg-blue-100 dark:bg-blue-900/30 border-l-4 border-blue-500 dark:border-blue-400 text-blue-700 dark:text-blue-300 p-4 mb-6 rounded">
           <div className="flex items-center">
             <AlertCircle className="mr-2" size={20} />
             <div className="flex-1">
@@ -301,10 +339,10 @@ export default function EsfinteresPage() {
       {/* Header del Dashboard */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6 sm:mb-8">
         <div className="flex-1 min-w-0">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2 whitespace-nowrap">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2 whitespace-nowrap">
             Control de Esfínteres
           </h1>
-          <p className="text-sm sm:text-base text-gray-600">
+          <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
             {isPremium ? (
               <span className="flex items-center">
                 <Crown className="mr-2 text-yellow-500 flex-shrink-0" size={14} />
@@ -334,17 +372,17 @@ export default function EsfinteresPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.1 }}
           whileHover={{ scale: 1.05, y: -5 }}
-          className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg"
+          className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-200 dark:border-gray-700"
         >
           <div className="flex items-center justify-between mb-3 sm:mb-4">
-              <Droplet className="text-blue-500 flex-shrink-0" size={20} />
-              <span className="text-xl sm:text-2xl font-bold text-gray-800">
+              <Droplet className="text-blue-500 dark:text-blue-400 flex-shrink-0" size={20} />
+              <span className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-100">
                 {visibleActivities.filter(a => a.details?.type === 'pipi' || a.details?.type === 'húmedo').length}
               </span>
             </div>
-            <p className="text-sm sm:text-base text-gray-600">Registros de pis</p>
+            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">Registros de pis</p>
             {!isPremium && (
-              <p className="text-xs text-gray-400 mt-1 sm:mt-2">Últimos {FREE_LIMIT_DAYS} días</p>
+              <p className="text-xs text-gray-400 dark:text-gray-500 mt-1 sm:mt-2">Últimos {FREE_LIMIT_DAYS} días</p>
             )}
         </motion.div>
 
@@ -353,17 +391,17 @@ export default function EsfinteresPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: 0.2 }}
             whileHover={{ scale: 1.05, y: -5 }}
-            className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg"
+            className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-200 dark:border-gray-700"
           >
             <div className="flex items-center justify-between mb-3 sm:mb-4">
-              <TrendingUp className="text-purple-500 flex-shrink-0" size={20} />
-              <span className="text-xl sm:text-2xl font-bold text-gray-800">
+              <TrendingUp className="text-purple-500 dark:text-purple-400 flex-shrink-0" size={20} />
+              <span className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-100">
                 {visibleActivities.filter(a => a.details?.type === 'caca' || a.details?.type === 'sucio').length}
               </span>
             </div>
-            <p className="text-sm sm:text-base text-gray-600">Registros de caca</p>
+            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">Registros de caca</p>
             {!isPremium && (
-              <p className="text-xs text-gray-400 mt-1 sm:mt-2">Últimos {FREE_LIMIT_DAYS} días</p>
+              <p className="text-xs text-gray-400 dark:text-gray-500 mt-1 sm:mt-2">Últimos {FREE_LIMIT_DAYS} días</p>
             )}
         </motion.div>
 
@@ -372,26 +410,26 @@ export default function EsfinteresPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: 0.3 }}
             whileHover={{ scale: 1.05, y: -5 }}
-            className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg"
+            className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-200 dark:border-gray-700"
           >
             <div className="flex items-center justify-between mb-3 sm:mb-4">
-              <Calendar className="text-green-500 flex-shrink-0" size={20} />
-              <span className="text-xl sm:text-2xl font-bold text-gray-800">
+              <Calendar className="text-green-500 dark:text-green-400 flex-shrink-0" size={20} />
+              <span className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-100">
                 {visibleActivities.length}
               </span>
             </div>
-            <p className="text-sm sm:text-base text-gray-600">Total registros</p>
+            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">Total registros</p>
             {!isPremium && (
-              <p className="text-xs text-gray-400 mt-1 sm:mt-2">Últimos {FREE_LIMIT_DAYS} días</p>
+              <p className="text-xs text-gray-400 dark:text-gray-500 mt-1 sm:mt-2">Últimos {FREE_LIMIT_DAYS} días</p>
             )}
           </motion.div>
       </div>
 
       {/* Registro Rápido (Quick Add) */}
-      <div className="bg-white rounded-2xl p-6 shadow-lg mb-8">
+      <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg mb-8 border border-gray-200 dark:border-gray-700">
         <div className="flex items-center gap-2 mb-4">
-          <Zap className="text-yellow-500" size={20} />
-          <h2 className="text-xl font-bold text-gray-800">Registro Rápido</h2>
+          <Zap className="text-yellow-500 dark:text-yellow-400" size={20} />
+          <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">Registro Rápido</h2>
         </div>
         <div className="grid grid-cols-3 gap-2 sm:gap-4">
             <Button
@@ -425,28 +463,28 @@ export default function EsfinteresPage() {
         </div>
 
         {/* Resumen del Día */}
-        <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg mb-6 sm:mb-8">
-          <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-3 sm:mb-4">Resumen de Hoy</h2>
+        <div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg mb-6 sm:mb-8 border border-gray-200 dark:border-gray-700">
+          <h2 className="text-lg sm:text-xl font-bold text-gray-800 dark:text-gray-100 mb-3 sm:mb-4">Resumen de Hoy</h2>
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 sm:gap-4">
             <div className="text-center">
-              <p className="text-2xl sm:text-3xl font-bold text-blue-600">{todayStats.pis}</p>
-              <p className="text-xs sm:text-sm text-gray-600">Pis</p>
+              <p className="text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400">{todayStats.pis}</p>
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Pis</p>
             </div>
             <div className="text-center">
-              <p className="text-2xl sm:text-3xl font-bold text-purple-600">{todayStats.caca}</p>
-              <p className="text-xs sm:text-sm text-gray-600">Caca</p>
+              <p className="text-2xl sm:text-3xl font-bold text-purple-600 dark:text-purple-400">{todayStats.caca}</p>
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Caca</p>
             </div>
             <div className="text-center">
-              <p className="text-2xl sm:text-3xl font-bold text-indigo-600">{todayStats.pipiCaca}</p>
-              <p className="text-xs sm:text-sm text-gray-600">Pis y Caca</p>
+              <p className="text-2xl sm:text-3xl font-bold text-indigo-600 dark:text-indigo-400">{todayStats.pipiCaca}</p>
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Pis y Caca</p>
             </div>
             <div className="text-center">
-              <p className="text-2xl sm:text-3xl font-bold text-green-600">{todayStats.seco}</p>
-              <p className="text-xs sm:text-sm text-gray-600">Seco</p>
+              <p className="text-2xl sm:text-3xl font-bold text-green-600 dark:text-green-400">{todayStats.seco}</p>
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Seco</p>
             </div>
             <div className="text-center">
-              <p className="text-2xl sm:text-3xl font-bold text-gray-800">{todayStats.total}</p>
-              <p className="text-xs sm:text-sm text-gray-600">Total</p>
+              <p className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-100">{todayStats.total}</p>
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Total</p>
             </div>
           </div>
         </div>
@@ -559,6 +597,7 @@ export default function EsfinteresPage() {
           {showCalendar && (
             <CalendarView
               activities={visibleActivities}
+              isPremium={isPremium}
               onDayClick={(date, dayActivities) => {
                 setSelectedDayDate(date)
                 setSelectedDayActivities(dayActivities)

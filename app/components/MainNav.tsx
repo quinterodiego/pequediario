@@ -19,7 +19,7 @@ export function MainNav() {
   const router = useRouter()
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 safe-area-bottom">
+    <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 z-50 safe-area-bottom">
       <div className="container mx-auto px-2">
         <div className="flex justify-around items-center h-16">
           {navItems.map((item) => {
@@ -35,8 +35,8 @@ export function MainNav() {
                 onClick={() => router.push(item.path)}
                 className={`flex flex-col items-center justify-center gap-1 h-full w-full rounded-none ${
                   isActive 
-                    ? 'text-[#8CCFE0] bg-[#8CCFE0]/10' 
-                    : 'text-gray-600 hover:text-gray-900'
+                    ? 'text-[#8CCFE0] dark:text-[#8CCFE0] bg-[#8CCFE0]/10 dark:bg-[#8CCFE0]/20' 
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
                 }`}
               >
                 <Icon size={20} />

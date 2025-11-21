@@ -80,9 +80,11 @@ export async function POST(request: NextRequest) {
     const isPremium = session.user.isPremium || false
     
     if (!isPremium) {
-      // TODO: Contar registros del mes actual desde Sheets
-      // Por ahora permitimos, luego implementamos el límite
-      const monthlyCount = 0 // TODO: Obtener desde Sheets
+      // Obtener conteo mensual actual
+      const activitiesResult = await GoogleSheetsService.getActivities(session.user.email!, {
+        limit: 1, // Solo necesitamos el conteo, no las actividades
+      })
+      const monthlyCount = activitiesResult.monthlyCount || 0
       const FREE_LIMIT_MONTHLY = 50
       
       if (monthlyCount >= FREE_LIMIT_MONTHLY) {

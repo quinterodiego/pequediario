@@ -29,8 +29,8 @@ export function Onboarding({ onComplete }: OnboardingProps) {
       <div className="min-h-screen bg-gradient-to-br from-[#8CCFE0] to-[#E9A5B4] flex items-center justify-center p-4">
         <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full">
           <div className="text-center mb-8">
-            <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-[#8CCFE0] to-[#E9A5B4] flex items-center justify-center">
-              <Baby size={48} className="text-white" />
+            <div className="flex items-center justify-center mb-5">
+              <img src="/logo.png" alt="Peque Diario" width={100} height={100} />
             </div>
             <h1 className="text-3xl font-bold text-gray-800 mb-2">
                   ¡Bienvenido a Peque Diario!

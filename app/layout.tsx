@@ -1,6 +1,9 @@
 import './globals.css'
 import { Inter } from 'next/font/google'
 import { AuthProvider } from './components/AuthProvider'
+import { AuthModalProvider } from './components/AuthModalContext'
+import { ThemeProvider } from './components/ThemeProvider'
+import { Footer } from './components/Footer'
 import { Toaster } from './components/ui/toaster'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -32,7 +35,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="es">
+    <html lang="es" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/favicon.ico" type="image/x-icon" />
         <link rel="icon" href="/icon-192x192.png" type="image/png" sizes="192x192" />
@@ -40,20 +43,17 @@ export default function RootLayout({
         <meta name="theme-color" content="#8CCFE0" />
       </head>
       <body className={`${inter.className} app-container`} suppressHydrationWarning>
-        <AuthProvider>
-          <div className="safe-area">
-            {children}
-          </div>
-          <footer className="bg-gray-50 border-t border-gray-200 py-6 mt-12">
-            <div className="container mx-auto px-4 text-center text-sm text-gray-600">
-              <p className="mb-2">
-                <strong>Peque Diario</strong> no reemplaza la consulta con pediatras ni otros profesionales de la salud.
-              </p>
-              <p>© {new Date().getFullYear()} Peque Diario. Todos los derechos reservados.</p>
-            </div>
-          </footer>
-          <Toaster />
-        </AuthProvider>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+          <AuthProvider>
+            <AuthModalProvider>
+              <div className="safe-area">
+                {children}
+              </div>
+              <Footer />
+              <Toaster />
+            </AuthModalProvider>
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

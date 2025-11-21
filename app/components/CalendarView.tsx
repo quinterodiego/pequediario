@@ -14,14 +14,23 @@ interface Activity {
 interface CalendarViewProps {
   activities: Activity[]
   onDayClick?: (date: Date, dayActivities: Activity[]) => void
+  isPremium?: boolean
 }
 
 type FilterType = 'all' | 'pis' | 'caca' | 'pipi-caca' | 'seco'
 
-export function CalendarView({ activities, onDayClick }: CalendarViewProps) {
+export function CalendarView({ activities, onDayClick, isPremium = false }: CalendarViewProps) {
   const [currentMonth, setCurrentMonth] = useState(new Date())
   const [filter, setFilter] = useState<FilterType>('all')
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+  
+  // Limitar actividades a últimos 30 días si no es Premium
+  const FREE_LIMIT_DAYS = 30
+  const now = new Date()
+  const thirtyDaysAgo = new Date(now.getTime() - FREE_LIMIT_DAYS * 24 * 60 * 60 * 1000)
+  const filteredActivities = isPremium 
+    ? activities 
+    : activities.filter(act => new Date(act.timestamp) >= thirtyDaysAgo)
 
   // Obtener el primer día del mes y el número de días
   const firstDayOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1)
@@ -33,10 +42,10 @@ export function CalendarView({ activities, onDayClick }: CalendarViewProps) {
   const adjustedStartingDay = startingDayOfWeek === 0 ? 6 : startingDayOfWeek - 1
 
   // Filtrar actividades según el filtro seleccionado
-  const filteredActivities = useMemo(() => {
-    if (filter === 'all') return activities
+  const filteredByType = useMemo(() => {
+    if (filter === 'all') return filteredActivities
 
-    return activities.filter(activity => {
+    return filteredActivities.filter(activity => {
       const type = activity.details?.type || 'seco'
       if (filter === 'pis') return type === 'pipi' || type === 'húmedo'
       if (filter === 'caca') return type === 'caca' || type === 'sucio'
@@ -44,13 +53,13 @@ export function CalendarView({ activities, onDayClick }: CalendarViewProps) {
       if (filter === 'seco') return type === 'seco'
       return true
     })
-  }, [activities, filter])
+  }, [filteredActivities, filter])
 
   // Agrupar actividades por día
   const activitiesByDay = useMemo(() => {
     const grouped: Record<string, Activity[]> = {}
 
-    filteredActivities.forEach(activity => {
+    filteredByType.forEach(activity => {
       const date = new Date(activity.timestamp)
       const dateKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
       
@@ -61,7 +70,7 @@ export function CalendarView({ activities, onDayClick }: CalendarViewProps) {
     })
 
     return grouped
-  }, [filteredActivities])
+  }, [filteredByType])
 
   // Obtener actividades de un día específico
   const getDayActivities = (day: number): Activity[] => {
@@ -99,14 +108,29 @@ export function CalendarView({ activities, onDayClick }: CalendarViewProps) {
 
   // Navegar al mes anterior
   const goToPreviousMonth = () => {
-    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1))
-    setSelectedDate(null)
+    if (!isPremium) {
+      const newMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1)
+      const thirtyDaysAgo = new Date(now.getTime() - FREE_LIMIT_DAYS * 24 * 60 * 60 * 1000)
+      // Solo permitir navegar si el mes no es anterior a 30 días
+      if (newMonth >= new Date(thirtyDaysAgo.getFullYear(), thirtyDaysAgo.getMonth(), 1)) {
+        setCurrentMonth(newMonth)
+        setSelectedDate(null)
+      }
+    } else {
+      setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1))
+      setSelectedDate(null)
+    }
   }
 
   // Navegar al mes siguiente
   const goToNextMonth = () => {
-    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1))
-    setSelectedDate(null)
+    const today = new Date()
+    const newMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1)
+    // No permitir navegar a meses futuros
+    if (newMonth <= new Date(today.getFullYear(), today.getMonth() + 1, 1)) {
+      setCurrentMonth(newMonth)
+      setSelectedDate(null)
+    }
   }
 
   // Ir al mes actual
@@ -142,8 +166,29 @@ export function CalendarView({ activities, onDayClick }: CalendarViewProps) {
     'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
   ]
 
+  // Verificar si el mes actual está fuera del rango permitido (no Premium)
+  const thirtyDaysAgoDate = new Date(now.getTime() - FREE_LIMIT_DAYS * 24 * 60 * 60 * 1000)
+  const isMonthOutOfRange = !isPremium && currentMonth < new Date(thirtyDaysAgoDate.getFullYear(), thirtyDaysAgoDate.getMonth(), 1)
+
   return (
     <div className="bg-white rounded-2xl p-6 shadow-lg">
+      {!isPremium && (
+        <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+          <p className="text-sm text-blue-800">
+            <strong>Versión Gratuita:</strong> Solo puedes ver los últimos {FREE_LIMIT_DAYS} días. 
+            <a href="/premium" className="ml-1 text-blue-600 underline font-semibold">
+              Actualiza a Premium
+            </a> para ver todo el historial.
+          </p>
+        </div>
+      )}
+      {isMonthOutOfRange && (
+        <div className="mb-4 p-3 bg-yellow-50 border border-yellow-300 rounded-lg">
+          <p className="text-sm text-yellow-800">
+            Este mes está fuera del rango permitido. Solo puedes ver los últimos {FREE_LIMIT_DAYS} días.
+          </p>
+        </div>
+      )}
       {/* Header del Calendario */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-4">

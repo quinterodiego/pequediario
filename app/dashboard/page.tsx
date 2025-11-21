@@ -19,7 +19,7 @@ export default function InicioPage() {
   const router = useRouter()
   const [activities, setActivities] = useState<Activity[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [isPremium, setIsPremium] = useState(false)
+  const [isPremium, setIsPremium] = useState<boolean | null>(null)
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -28,7 +28,14 @@ export default function InicioPage() {
     }
 
     if (status === 'authenticated' && session?.user) {
-      setIsPremium(session.user.isPremium || false)
+      // Verificar explícitamente si es Premium (puede ser undefined, null, false o true)
+      const premiumStatus = Boolean(session.user.isPremium === true)
+      console.log('Premium status check:', {
+        raw: session.user.isPremium,
+        boolean: premiumStatus,
+        user: session.user
+      })
+      setIsPremium(premiumStatus)
       loadActivities()
     }
   }, [status, session, router])
@@ -122,12 +129,50 @@ export default function InicioPage() {
 
   return (
     <div>
+      {/* Premium Banner (si no es premium) - Prominente al inicio */}
+      {!isPremium && (
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 rounded-2xl p-6 shadow-xl mb-8 border-4 border-yellow-300"
+        >
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex items-start gap-4 flex-1">
+              <div className="bg-white/20 rounded-full p-3 backdrop-blur-sm">
+                <Crown className="text-white" size={32} />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">
+                  ✨ Desbloquea todas las funcionalidades Premium
+                </h3>
+                <p className="text-white/95 text-sm sm:text-base mb-3">
+                  Registros ilimitados, historial completo, calendario sin límites, gestión de familia y más
+                </p>
+                <div className="flex flex-wrap gap-2 text-xs sm:text-sm text-white/90">
+                  <span className="bg-white/20 px-2 py-1 rounded">✓ Sin límites</span>
+                  <span className="bg-white/20 px-2 py-1 rounded">✓ Historial completo</span>
+                  <span className="bg-white/20 px-2 py-1 rounded">✓ Exportar PDF</span>
+                  <span className="bg-white/20 px-2 py-1 rounded">✓ Gestión familiar</span>
+                </div>
+              </div>
+            </div>
+            <Button
+              onClick={() => router.push('/premium')}
+              className="bg-white text-yellow-600 hover:bg-gray-100 font-bold px-6 py-3 text-base shadow-lg whitespace-nowrap"
+            >
+              Ver Premium
+              <ArrowRight className="ml-2" size={18} />
+            </Button>
+          </div>
+        </motion.div>
+      )}
+
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-2">
+        <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 dark:text-gray-100 mb-2">
           Inicio
         </h1>
-        <p className="text-gray-600">
+        <p className="text-gray-600 dark:text-gray-400">
           Resumen del día • {new Date().toLocaleDateString('es', { weekday: 'long', day: 'numeric', month: 'long' })}
         </p>
       </div>
@@ -175,7 +220,7 @@ export default function InicioPage() {
 
       {/* Accesos Rápidos */}
       <div className="mb-8">
-        <h2 className="text-xl font-bold text-gray-800 mb-4">Accesos Rápidos</h2>
+        <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4">Accesos Rápidos</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {sections.map((section, index) => {
             const Icon = section.icon
@@ -189,13 +234,13 @@ export default function InicioPage() {
               >
                 <Button
                   onClick={() => router.push(section.href)}
-                  className="w-full h-24 bg-white hover:bg-gray-50 text-gray-800 shadow-lg border border-gray-200 flex flex-col items-center justify-center gap-2"
+                  className="w-full h-24 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-100 shadow-lg border border-gray-200 dark:border-gray-700 flex flex-col items-center justify-center gap-2"
                   variant="outline"
                 >
                   <Icon className={section.iconColor} size={28} />
                   <div className="text-center">
                     <p className="font-semibold text-sm">{section.name}</p>
-                    <p className="text-xs text-gray-500">{section.description}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">{section.description}</p>
                   </div>
                 </Button>
               </motion.div>
@@ -207,24 +252,24 @@ export default function InicioPage() {
       {/* Últimos Registros */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-gray-800">Últimos Registros</h2>
+          <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">Últimos Registros</h2>
           <Button
             onClick={() => router.push('/dashboard/esfinteres')}
             variant="ghost"
             size="sm"
-            className="text-gray-600"
+            className="text-gray-600 dark:text-gray-400"
           >
             Ver todos
             <ArrowRight className="ml-2" size={16} />
           </Button>
         </div>
         {recentActivities.length === 0 ? (
-          <div className="bg-white rounded-2xl p-8 shadow-lg text-center">
-            <Droplet className="mx-auto text-gray-300 mb-4" size={48} />
-            <p className="text-gray-600 mb-4">Aún no hay registros</p>
+          <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg text-center border border-gray-200 dark:border-gray-700">
+            <Droplet className="mx-auto text-gray-300 dark:text-gray-600 mb-4" size={48} />
+            <p className="text-gray-600 dark:text-gray-400 mb-4">Aún no hay registros</p>
             <Button
               onClick={() => router.push('/dashboard/esfinteres/registro')}
-              className="bg-gradient-to-r from-[#8CCFE0] to-[#E9A5B4] hover:from-[#7CBFD0] hover:to-[#D995A4] text-[#1E293B]"
+              className="bg-gradient-to-r from-[#8CCFE0] to-[#E9A5B4] hover:from-[#7CBFD0] hover:to-[#D995A4] text-[#1E293B] dark:text-gray-100"
             >
               <Plus className="mr-2" size={18} />
               Crear Primer Registro
@@ -245,24 +290,24 @@ export default function InicioPage() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.05 }}
                   onClick={() => router.push('/dashboard/esfinteres')}
-                  className="bg-white rounded-xl p-4 shadow-md hover:shadow-lg transition-shadow cursor-pointer"
+                  className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-md hover:shadow-lg transition-shadow cursor-pointer border border-gray-200 dark:border-gray-700"
                 >
                   <div className="flex items-center gap-4">
                     <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                      isPipi ? 'bg-blue-100 text-blue-600' :
-                      isCaca ? 'bg-purple-100 text-purple-600' :
-                      'bg-green-100 text-green-600'
+                      isPipi ? 'bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300' :
+                      isCaca ? 'bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300' :
+                      'bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300'
                     }`}>
                       <Droplet size={24} />
                     </div>
                     <div className="flex-1">
-                      <p className="font-semibold text-gray-800">
+                      <p className="font-semibold text-gray-800 dark:text-gray-100">
                         {isPipi && 'Pis'}
                         {isCaca && 'Caca'}
                         {isSeco && 'Seco'}
                         {type === 'pipi-caca' && 'Pis y Caca'}
                       </p>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
                         {new Date(activity.timestamp).toLocaleString('es', {
                           day: '2-digit',
                           month: '2-digit',
@@ -271,7 +316,7 @@ export default function InicioPage() {
                         })}
                       </p>
                     </div>
-                    <Clock className="text-gray-400" size={18} />
+                    <Clock className="text-gray-400 dark:text-gray-500" size={18} />
                   </div>
                 </motion.div>
               )
@@ -280,32 +325,6 @@ export default function InicioPage() {
         )}
       </div>
 
-      {/* Premium Banner (si no es premium) */}
-      {!isPremium && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-2xl p-6 shadow-lg text-white"
-        >
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Crown className="text-white" size={32} />
-              <div>
-                <h3 className="text-xl font-bold mb-1">Actualiza a Premium</h3>
-                <p className="text-white/90 text-sm">Registros ilimitados y funcionalidades exclusivas</p>
-              </div>
-            </div>
-            <Button
-              onClick={() => router.push('/premium')}
-              variant="outline"
-              className="bg-white/20 hover:bg-white/30 text-white border-white/30"
-            >
-              Ver planes
-              <ArrowRight className="ml-2" size={16} />
-            </Button>
-          </div>
-        </motion.div>
-      )}
     </div>
   )
 }

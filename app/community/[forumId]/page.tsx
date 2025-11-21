@@ -128,10 +128,10 @@ export default function ForumPage() {
 
   if (status === 'loading' || (isLoading && !forum)) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-900">
         <Header />
         <div className="container mx-auto px-4 py-8">
-          <div className="text-center">Cargando foro...</div>
+          <div className="text-center text-gray-600 dark:text-gray-400">Cargando foro...</div>
         </div>
       </div>
     )
@@ -143,11 +143,11 @@ export default function ForumPage() {
 
   if (!forum) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-900">
         <Header />
         <div className="container mx-auto px-4 py-8">
           <div className="text-center">
-            <p className="text-gray-600 mb-4">Foro no encontrado</p>
+            <p className="text-gray-600 dark:text-gray-400 mb-4">Foro no encontrado</p>
             <Button onClick={() => router.push('/community')}>
               Volver a Comunidad
             </Button>
@@ -164,7 +164,7 @@ export default function ForumPage() {
   )
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-900">
       <Header />
       
       <main className="container mx-auto px-3 sm:px-4 py-4 sm:py-8 max-w-4xl">
@@ -176,7 +176,7 @@ export default function ForumPage() {
                 onClick={() => router.push('/community')}
                 variant="ghost"
                 size="sm"
-                className="flex-shrink-0 px-2 sm:px-3"
+                className="flex-shrink-0 px-2 sm:px-3 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
               >
                 <ArrowLeft className="sm:mr-2" size={16} />
                 <span className="hidden sm:inline">Volver</span>
@@ -185,16 +185,16 @@ export default function ForumPage() {
                 <div className="flex items-start gap-2 sm:gap-3 flex-1 min-w-0">
                   <span className="text-3xl sm:text-4xl flex-shrink-0">{forum.icon}</span>
                   <div className="flex-1 min-w-0">
-                    <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800">
+                    <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 dark:text-gray-100">
                       {forum.name}
                     </h1>
-                    <p className="text-xs sm:text-sm text-gray-600 mt-1 line-clamp-2">
+                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">
                       {forum.description}
                     </p>
                   </div>
                 </div>
               ) : (
-                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800">
+                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 dark:text-gray-100">
                   Cargando foro...
                 </h1>
               )}
@@ -217,18 +217,18 @@ export default function ForumPage() {
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6"
+            className="bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/30 dark:to-orange-900/30 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6"
           >
             <div className="flex items-start gap-2 sm:gap-3">
-              <Crown className="text-yellow-600 flex-shrink-0 mt-0.5 sm:mt-1" size={20} />
+              <Crown className="text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5 sm:mt-1" size={20} />
               <div className="flex-1 min-w-0">
-                <p className="font-semibold text-gray-800 mb-1 text-sm sm:text-base">Versión Gratuita</p>
-                <p className="text-xs sm:text-sm text-gray-700 mb-2">
+                <p className="font-semibold text-gray-800 dark:text-gray-200 mb-1 text-sm sm:text-base">Versión Gratuita</p>
+                <p className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 mb-2">
                   Puedes leer todos los posts y comentar (máximo 3 comentarios por día).
                   <Button
                     onClick={() => router.push('/premium')}
                     variant="link"
-                    className="ml-1 sm:ml-2 text-yellow-600 underline p-0 h-auto text-xs sm:text-sm"
+                    className="ml-1 sm:ml-2 text-yellow-600 dark:text-yellow-400 underline p-0 h-auto text-xs sm:text-sm"
                   >
                     Actualiza a Premium
                   </Button>
@@ -246,12 +246,12 @@ export default function ForumPage() {
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
-              className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg mb-4 sm:mb-6 overflow-hidden"
+              className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg mb-4 sm:mb-6 overflow-hidden border border-gray-200 dark:border-gray-700"
             >
-              <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-3 sm:mb-4">Crear Nuevo Post</h2>
+              <h2 className="text-lg sm:text-xl font-bold text-gray-800 dark:text-gray-100 mb-3 sm:mb-4">Crear Nuevo Post</h2>
               <div className="space-y-3 sm:space-y-4">
                 <div>
-                  <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
+                  <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 sm:mb-2">
                     Título
                   </label>
                   <input
@@ -259,12 +259,12 @@ export default function ForumPage() {
                     value={newPost.title}
                     onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
                     placeholder="Título de tu post..."
-                    className="w-full p-2.5 sm:p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
+                    className="w-full p-2.5 sm:p-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
                     maxLength={100}
                   />
                 </div>
                 <div>
-                  <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
+                  <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 sm:mb-2">
                     Contenido
                   </label>
                   <textarea
@@ -272,10 +272,10 @@ export default function ForumPage() {
                     onChange={(e) => setNewPost({ ...newPost, content: e.target.value })}
                     placeholder="Escribe tu post aquí..."
                     rows={5}
-                    className="w-full p-2.5 sm:p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
+                    className="w-full p-2.5 sm:p-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
                     maxLength={2000}
                   />
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                     {newPost.content.length}/2000 caracteres
                   </p>
                 </div>
@@ -306,22 +306,22 @@ export default function ForumPage() {
         {/* Búsqueda */}
         <div className="mb-4 sm:mb-6">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500" size={18} />
             <input
               type="text"
               placeholder="Buscar posts..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 sm:pl-10 pr-4 py-2.5 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
+              className="w-full pl-9 sm:pl-10 pr-4 py-2.5 sm:py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
             />
           </div>
         </div>
 
         {/* Lista de Posts */}
         {filteredPosts.length === 0 ? (
-          <div className="text-center py-12 bg-white rounded-2xl shadow-lg">
-            <MessageCircle className="mx-auto text-gray-300 mb-4" size={48} />
-            <p className="text-gray-600 mb-4">No hay posts en este foro aún</p>
+          <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
+            <MessageCircle className="mx-auto text-gray-300 dark:text-gray-600 mb-4" size={48} />
+            <p className="text-gray-600 dark:text-gray-400 mb-4">No hay posts en este foro aún</p>
             {isPremium && (
               <Button
                 onClick={() => setShowCreatePost(true)}
@@ -342,33 +342,33 @@ export default function ForumPage() {
                 transition={{ duration: 0.3, delay: index * 0.05 }}
                 whileHover={{ scale: 1.01, y: -2 }}
                 onClick={() => router.push(`/community/post/${post.id}`)}
-                className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg cursor-pointer hover:shadow-xl transition-shadow active:scale-95"
+                className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg cursor-pointer hover:shadow-xl transition-shadow active:scale-95 border border-gray-200 dark:border-gray-700"
               >
                 <div className="flex items-start gap-3 sm:gap-4 mb-3 sm:mb-4">
-                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center flex-shrink-0">
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900 flex items-center justify-center flex-shrink-0">
                     {post.userImage ? (
                       <img src={post.userImage} alt={post.userName} className="w-9 h-9 sm:w-10 sm:h-10 rounded-full" />
                     ) : (
-                      <User className="text-gray-600" size={18} />
+                      <User className="text-gray-600 dark:text-gray-400" size={18} />
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1 sm:mb-2 flex-wrap">
-                      <span className="font-semibold text-gray-800 text-sm sm:text-base">{post.userName}</span>
+                      <span className="font-semibold text-gray-800 dark:text-gray-100 text-sm sm:text-base">{post.userName}</span>
                       {isPremium && (
-                        <Crown className="text-yellow-500 flex-shrink-0" size={12} />
+                        <Crown className="text-yellow-500 dark:text-yellow-400 flex-shrink-0" size={12} />
                       )}
                     </div>
-                    <h3 className="text-lg sm:text-xl font-bold text-gray-800 mb-1 sm:mb-2 line-clamp-2">
+                    <h3 className="text-lg sm:text-xl font-bold text-gray-800 dark:text-gray-100 mb-1 sm:mb-2 line-clamp-2">
                       {post.title}
                     </h3>
-                    <p className="text-sm sm:text-base text-gray-600 line-clamp-3">
+                    <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 line-clamp-3">
                       {post.content}
                     </p>
                   </div>
                 </div>
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0 pt-3 sm:pt-4 border-t border-gray-100">
-                  <div className="flex items-center gap-3 sm:gap-4 text-xs sm:text-sm text-gray-500 flex-wrap">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0 pt-3 sm:pt-4 border-t border-gray-100 dark:border-gray-700">
+                  <div className="flex items-center gap-3 sm:gap-4 text-xs sm:text-sm text-gray-500 dark:text-gray-400 flex-wrap">
                     <div className="flex items-center gap-1">
                       <Clock size={12} />
                       <span className="whitespace-nowrap">
@@ -386,7 +386,7 @@ export default function ForumPage() {
                       <span>Ver comentarios</span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-1 text-gray-500">
+                  <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400">
                     <Heart size={14} />
                     <span className="text-xs sm:text-sm">{post.likes}</span>
                   </div>
