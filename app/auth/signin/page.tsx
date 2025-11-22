@@ -198,7 +198,6 @@ function SignInForm() {
           </div>
         </div>
       </main>
-    </div>
   )
 }
 
