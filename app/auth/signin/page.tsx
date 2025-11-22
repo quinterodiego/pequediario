@@ -1,13 +1,13 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 import { Header } from '@/app/components/Header'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 import { Button } from '@/app/components/ui/button'
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react'
 
-export default function SignInPage() {
+function SignInForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [formData, setFormData] = useState({
@@ -74,10 +74,7 @@ export default function SignInPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
-      
-      <main className="container mx-auto px-4 py-12 md:py-20">
+    <main className="container mx-auto px-4 py-12 md:py-20">
         <div className="max-w-md mx-auto">
           <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-200">
             <div className="text-center mb-8">
@@ -201,6 +198,27 @@ export default function SignInPage() {
           </div>
         </div>
       </main>
+    </div>
+  )
+}
+
+export default function SignInPage() {
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <Header />
+      <Suspense fallback={
+        <main className="container mx-auto px-4 py-12 md:py-20">
+          <div className="max-w-md mx-auto">
+            <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-200">
+              <div className="text-center">
+                <p className="text-gray-600">Cargando...</p>
+              </div>
+            </div>
+          </div>
+        </main>
+      }>
+        <SignInForm />
+      </Suspense>
     </div>
   )
 }
