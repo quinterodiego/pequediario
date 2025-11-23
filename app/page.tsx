@@ -49,70 +49,71 @@ export default function Home() {
           </div>
 
           <div className="max-w-5xl mx-auto animate-fade-in">
-            <div className="inline-block mb-6 animate-slide-in">
-              <span className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm text-gray-700 px-5 py-2.5 rounded-full text-sm font-semibold shadow-md border border-[#8CCFE0]/30">
-                👶 Acompañando el crecimiento desde el nacimiento
+            <div className="inline-block mb-4 sm:mb-6 animate-slide-in">
+              <span className="inline-flex items-center gap-1.5 sm:gap-2 bg-white/80 backdrop-blur-sm text-gray-700 px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold shadow-md border border-[#8CCFE0]/30">
+                👶 <span className="hidden sm:inline">Acompañando el crecimiento desde el nacimiento</span>
+                <span className="sm:hidden">Acompañando el crecimiento</span>
               </span>
             </div>
             
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold  mb-6">
+            <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-extrabold mb-4 sm:mb-6 px-2">
               <span className="bg-gradient-to-r from-[#8CCFE0] to-[#E9A5B4] bg-clip-text text-transparent">Peque</span>{' '}
-              <span className="text-gray-700">Diario</span>{' '}
+              <span className="text-gray-700 dark:text-gray-200">Diario</span>{' '}
             </h1>
             
-            <p className="text-xl md:text-2xl lg:text-3xl text-gray-700 mb-10 max-w-3xl mx-auto leading-relaxed font-light">
+            <p className="text-base sm:text-xl md:text-2xl lg:text-3xl text-gray-700 dark:text-gray-300 mb-6 sm:mb-10 max-w-3xl mx-auto leading-relaxed font-light px-4">
               La app integral para padres que acompaña el{' '}
-              <span className="font-semibold text-gray-700">crecimiento de tu hijo</span>.
+              <span className="font-semibold text-gray-700 dark:text-gray-200">crecimiento de tu hijo</span>.
               <br className="hidden md:block" />
-              <span className="text-gray-500">Crecimiento, sueño, alimentación, hitos y control de esfínteres en un solo lugar.</span>
+              <span className="text-gray-500 dark:text-gray-400">Crecimiento, sueño, alimentación, hitos y control de esfínteres en un solo lugar.</span>
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center mb-12 sm:mb-16 px-4">
               {!session ? (
                 <>
                   <Button 
                     size="lg" 
-                    className="text-lg px-10 py-7 bg-gradient-to-r from-[#8CCFE0] to-[#E9A5B4] hover:from-[#7CBFD0] hover:to-[#D995A4] text-gray-700 shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 font-semibold"
+                    className="w-full sm:w-auto text-base sm:text-lg px-6 sm:px-10 py-5 sm:py-7 bg-gradient-to-r from-[#8CCFE0] to-[#E9A5B4] hover:from-[#7CBFD0] hover:to-[#D995A4] text-gray-700 shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 font-semibold"
                     onClick={handleGetStarted}
                   >
                     🚀 Comenzar Gratis
-                    <ArrowRight className="ml-2" size={20} />
+                    <ArrowRight className="ml-2" size={18} />
                   </Button>
                   <Button 
                     size="lg" 
                     variant="outline"
-                    className="text-lg px-10 py-7 border-2 border-[#CBD5E1] bg-white text-gray-700 hover:bg-gray-50 transition-all transform hover:scale-105 font-semibold"
+                    className="w-full sm:w-auto text-base sm:text-lg px-6 sm:px-10 py-5 sm:py-7 border-2 border-[#CBD5E1] dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all transform hover:scale-105 font-semibold"
                     onClick={() => router.push('/premium')}
                   >
-                    <Crown className="mr-2" size={20} />
+                    <Crown className="mr-2" size={18} />
                     Ver Premium
                   </Button>
                 </>
               ) : (
                 <Button 
                   size="lg" 
-                  className="text-lg px-10 py-7 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 text-white shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 font-semibold"
+                  className="w-full sm:w-auto text-base sm:text-lg px-6 sm:px-10 py-5 sm:py-7 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 text-white shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 font-semibold"
                   onClick={() => router.push('/dashboard')}
-                  >
-                    Ir al Dashboard
-                    <ArrowRight className="ml-2" size={20} />
-                  </Button>
+                >
+                  Ir al Dashboard
+                  <ArrowRight className="ml-2" size={18} />
+                </Button>
               )}
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-3 gap-8 max-w-3xl mx-auto mt-20">
-              <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/20 hover-lift">
-                <div className="text-4xl md:text-5xl font-extrabold gradient-text mb-2">1000+</div>
-                <div className="text-sm text-gray-700 font-medium">Padres activos</div>
+            <div className="grid grid-cols-3 gap-3 sm:gap-6 md:gap-8 max-w-3xl mx-auto mt-12 sm:mt-20 px-4">
+              <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-xl sm:rounded-2xl p-3 sm:p-6 shadow-lg border border-white/20 dark:border-gray-700/20 hover-lift">
+                <div className="text-2xl sm:text-4xl md:text-5xl font-extrabold gradient-text mb-1 sm:mb-2">1000+</div>
+                <div className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 font-medium">Padres activos</div>
               </div>
-              <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/20 hover-lift">
-                <div className="text-4xl md:text-5xl font-extrabold gradient-text mb-2">5000+</div>
-                <div className="text-sm text-gray-700 font-medium">Registros totales</div>
+              <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-xl sm:rounded-2xl p-3 sm:p-6 shadow-lg border border-white/20 dark:border-gray-700/20 hover-lift">
+                <div className="text-2xl sm:text-4xl md:text-5xl font-extrabold gradient-text mb-1 sm:mb-2">5000+</div>
+                <div className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 font-medium">Registros totales</div>
               </div>
-              <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/20 hover-lift">
-                <div className="text-4xl md:text-5xl font-extrabold gradient-text mb-2">4.9★</div>
-                <div className="text-sm text-gray-700 font-medium">Valoración</div>
+              <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-xl sm:rounded-2xl p-3 sm:p-6 shadow-lg border border-white/20 dark:border-gray-700/20 hover-lift">
+                <div className="text-2xl sm:text-4xl md:text-5xl font-extrabold gradient-text mb-1 sm:mb-2">4.9★</div>
+                <div className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 font-medium">Valoración</div>
               </div>
             </div>
           </div>

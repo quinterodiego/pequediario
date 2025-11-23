@@ -50,46 +50,44 @@ export function Header() {
                   variant="outline"
                   size="sm"
                   onClick={() => router.push('/premium')}
-                  className="hidden sm:flex items-center gap-2 border-yellow-600 bg-white text-yellow-600 hover:text-yellow-600 hover:bg-gray-100 px-2 sm:px-3 mr-3"
+                  className="hidden sm:flex items-center gap-2 border-yellow-600 bg-white dark:bg-gray-800 text-yellow-600 dark:text-yellow-400 hover:text-yellow-600 hover:bg-gray-100 dark:hover:bg-gray-700 px-2 sm:px-3"
                 >
-                  <Crown size={14} className="text-yellow-600" />
+                  <Crown size={14} className="text-yellow-600 dark:text-yellow-400" />
                   <span className="text-xs sm:text-sm">Premium</span>
                 </Button>
               )}
               {session.user?.isPremium && (
                 <ThemeToggle />
               )}
-              <div className="flex items-center space-x-1 sm:space-x-2">
-                <div className="flex items-center space-x-1 sm:space-x-2">
-                  {session.user?.image && (
-                    <img 
-                      src={session.user.image} 
-                      alt="Profile" 
-                      className="w-8 h-8 sm:w-9 sm:h-9 rounded-full ring-2 ring-primary-200 hover:ring-primary-400 transition-all"
-                    />
-                  )}
-                  <span className="hidden lg:block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-200">
-                    ¡Hola, {session.user?.name?.split(' ')[0]}!
-                  </span>
-                </div>
+              <div className="flex items-center space-x-0.5 sm:space-x-2">
+                {session.user?.image && (
+                  <img 
+                    src={session.user.image} 
+                    alt="Profile" 
+                    className="w-7 h-7 sm:w-9 sm:h-9 rounded-full ring-2 ring-primary-200 hover:ring-primary-400 transition-all hidden sm:block"
+                  />
+                )}
+                <span className="hidden xl:block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-200 ml-1 sm:ml-0">
+                  ¡Hola, {session.user?.name?.split(' ')[0]}!
+                </span>
                 
                 <Button 
                   variant="ghost" 
                   size="sm"
                   onClick={() => router.push('/dashboard')}
-                  className="text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 px-2 sm:px-3"
+                  className="text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 px-1.5 sm:px-3"
                 >
-                  <span className="hidden sm:inline text-xs sm:text-sm">Dashboard</span>
-                  <span className="sm:hidden text-xs">Dash</span>
+                  <span className="hidden md:inline text-xs sm:text-sm">Dashboard</span>
+                  <span className="md:hidden text-xs">Dash</span>
                 </Button>
                 
                 <Button 
                   variant="ghost" 
                   size="sm"
                   onClick={() => router.push('/community')}
-                  className="text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 px-2 sm:px-3"
+                  className="text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 px-1.5 sm:px-3"
                 >
-                  <MessageCircle size={16} className="sm:mr-2 sm:w-4 sm:h-4" />
+                  <MessageCircle size={16} className="sm:mr-1 sm:w-4 sm:h-4" />
                   <span className="hidden sm:inline text-xs sm:text-sm">Comunidad</span>
                 </Button>
                 
@@ -97,7 +95,7 @@ export function Header() {
                   variant="ghost" 
                   size="sm"
                   onClick={() => signOut()}
-                  className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 px-2 sm:px-3"
+                  className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 px-1.5 sm:px-3"
                 >
                   <LogOut size={16} className="sm:w-4 sm:h-4" />
                 </Button>
@@ -105,7 +103,7 @@ export function Header() {
             </>
           ) : (
             <>
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-1.5 sm:space-x-2">
                 <Button 
                   onClick={() => setShowLoginModal(true)}
                   variant="outline"

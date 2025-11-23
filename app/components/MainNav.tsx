@@ -20,8 +20,8 @@ export function MainNav() {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 z-50 safe-area-bottom">
-      <div className="container mx-auto px-2">
-        <div className="flex justify-around items-center h-16">
+      <div className="container mx-auto px-1 sm:px-2">
+        <div className="flex justify-around items-center h-14 sm:h-16">
           {navItems.map((item) => {
             const Icon = item.icon
             const isActive = pathname === item.path || 
@@ -33,14 +33,14 @@ export function MainNav() {
                 variant="ghost"
                 size="sm"
                 onClick={() => router.push(item.path)}
-                className={`flex flex-col items-center justify-center gap-1 h-full w-full rounded-none ${
+                className={`flex flex-col items-center justify-center gap-0.5 sm:gap-1 h-full w-full rounded-none px-0.5 sm:px-1 ${
                   isActive 
                     ? 'text-[#8CCFE0] dark:text-[#8CCFE0] bg-[#8CCFE0]/10 dark:bg-[#8CCFE0]/20' 
                     : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
                 }`}
               >
-                <Icon size={20} />
-                <span className="text-xs font-medium">{item.label}</span>
+                <Icon size={18} className="sm:w-5 sm:h-5" />
+                <span className="text-[10px] sm:text-xs font-medium leading-tight">{item.label}</span>
               </Button>
             )
           })}
