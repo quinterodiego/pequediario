@@ -66,7 +66,7 @@ Abre el archivo JSON descargado. Necesitarás estos valores:
 3. Crea las siguientes hojas (pestañas en la parte inferior):
 
 #### Hoja 1: "Usuarios"
-Crea esta estructura en la primera fila (A1-F1):
+Crea esta estructura en la primera fila (A1-G1):
 ```
 A1: Fecha_Registro
 B1: Email
@@ -74,7 +74,10 @@ C1: Nombre
 D1: Imagen
 E1: Es_Premium
 F1: País
+G1: Password_Hash
 ```
+
+**⚠️ IMPORTANTE**: La columna G (Password_Hash) es necesaria para el sistema de autenticación con usuario y contraseña. Si no existe esta columna, los datos se desfasarán al crear nuevos usuarios.
 
 #### Hoja 2: "Actividades"
 Crea esta estructura en la primera fila (A1-E1):

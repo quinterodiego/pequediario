@@ -35,7 +35,10 @@ C1: Nombre
 D1: Imagen
 E1: Es_Premium
 F1: País
+G1: Password_Hash
 ```
+
+**⚠️ IMPORTANTE**: La columna G (Password_Hash) es necesaria para el login con usuario y contraseña. Si no existe, los datos se desfasarán.
 
 #### Hoja "Actividades" (primera fila):
 ```

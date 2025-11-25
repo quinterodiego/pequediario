@@ -44,21 +44,29 @@ export class GoogleSheetsService {
         ? await bcrypt.hash(userData.password, 10)
         : ''
 
+      // Estructura de columnas:
+      // A: Fecha_Registro
+      // B: Email
+      // C: Nombre
+      // D: Imagen
+      // E: Es_Premium
+      // F: País
+      // G: Password_Hash (⚠️ IMPORTANTE: Esta columna debe existir en el sheet)
       const values = [
         [
-          new Date().toISOString(),
-          userData.email,
-          userData.name,
-          userData.image || '',
-          userData.isPremium || false,
-          '', // País (opcional)
-          hashedPassword, // Contraseña hasheada (columna G)
+          new Date().toISOString(),        // A: Fecha_Registro
+          userData.email,                  // B: Email
+          userData.name,                   // C: Nombre
+          userData.image || '',            // D: Imagen
+          userData.isPremium || false,    // E: Es_Premium
+          '',                              // F: País (opcional)
+          hashedPassword,                  // G: Password_Hash
         ]
       ]
 
       await sheets.spreadsheets.values.append({
         spreadsheetId: SPREADSHEET_ID,
-        range: 'Usuarios!A:G',
+        range: 'Usuarios!A:G', // ⚠️ Asegúrate de que la columna G existe en el sheet
         valueInputOption: 'RAW',
         requestBody: { values },
       })

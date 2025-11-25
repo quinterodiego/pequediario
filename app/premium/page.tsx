@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Header } from '../components/Header'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
@@ -9,7 +9,7 @@ import {
   Crown, CheckCircle, ArrowRight, Shield, 
   Calendar, Users, FileText, TrendingUp,
   MessageCircle, Lightbulb, Droplet, Star,
-  ChevronDown, ChevronUp
+  ChevronDown, ChevronUp, Clock
 } from 'lucide-react'
 import { formatNumberAR } from '@/lib/utils'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -25,6 +25,26 @@ export default function PremiumPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const [expandedFeatures, setExpandedFeatures] = useState<Set<string>>(new Set())
+  const [isProcessing, setIsProcessing] = useState(false)
+  const [paymentStatus, setPaymentStatus] = useState<string | null>(null)
+
+  // Verificar parámetros de URL para mensajes de pago
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const paymentParam = params.get('payment')
+    if (paymentParam) {
+      setPaymentStatus(paymentParam)
+      // Limpiar URL después de mostrar el mensaje
+      window.history.replaceState({}, '', '/premium')
+      
+      // Si el pago fue exitoso, refrescar la sesión después de un momento
+      if (paymentParam === 'success') {
+        setTimeout(() => {
+          window.location.reload()
+        }, 3000)
+      }
+    }
+  }, [])
 
   const toggleFeature = (featureName: string) => {
     const newExpanded = new Set(expandedFeatures)
@@ -113,10 +133,64 @@ export default function PremiumPage() {
     }
   }
 
-  const handleUpgrade = () => {
-    // TODO: Implementar flujo de pago
-    // Por ahora, mostrar mensaje o redirigir a contacto
-    alert('Funcionalidad de pago próximamente disponible. Por favor, contacta con soporte para actualizar a Premium.')
+  const handleUpgrade = async () => {
+    if (!session?.user?.email) {
+      router.push('/auth/signin')
+      return
+    }
+
+    if (session.user.isPremium === true) {
+      return
+    }
+
+    try {
+      setIsProcessing(true)
+      
+      // Crear preferencia de pago
+      const response = await fetch('/api/payments/create-preference', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ price: 14999 }),
+      })
+
+      // Verificar el tipo de contenido de la respuesta
+      const contentType = response.headers.get('content-type')
+      if (!contentType || !contentType.includes('application/json')) {
+        const text = await response.text()
+        console.error('Respuesta no es JSON:', text.substring(0, 200))
+        throw new Error('El servidor devolvió una respuesta inesperada. Por favor verifica la configuración.')
+      }
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        const errorMsg = data.details || data.error || 'Error al crear la preferencia de pago'
+        console.error('Error del servidor:', data)
+        throw new Error(errorMsg)
+      }
+
+      // Redirigir al checkout de Mercado Pago
+      // Usar checkoutUrl si está disponible (ya determina si es sandbox o producción)
+      // Si no, usar sandboxInitPoint para desarrollo o initPoint para producción
+      const checkoutUrl = data.checkoutUrl || 
+        (data.isTestToken ? data.sandboxInitPoint : data.initPoint) ||
+        data.sandboxInitPoint || 
+        data.initPoint
+
+      if (checkoutUrl) {
+        console.log('Redirigiendo a checkout:', checkoutUrl)
+        window.location.href = checkoutUrl
+      } else {
+        throw new Error('No se recibió URL de checkout')
+      }
+    } catch (error: any) {
+      console.error('Error iniciando pago:', error)
+      const errorMessage = error.message || 'Por favor intenta nuevamente'
+      alert(`Error al iniciar el pago: ${errorMessage}`)
+      setIsProcessing(false)
+    }
   }
 
   return (
@@ -124,6 +198,49 @@ export default function PremiumPage() {
       <Header />
       
       <main className="container mx-auto px-4 py-12 md:py-20">
+        {/* Mensajes de estado de pago */}
+        {paymentStatus === 'success' && (
+          <div className="mb-6 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 rounded-lg p-4">
+            <div className="flex items-center gap-3">
+              <CheckCircle className="text-green-600 dark:text-green-400" size={24} />
+              <div>
+                <h3 className="font-semibold text-green-800 dark:text-green-200">¡Pago exitoso!</h3>
+                <p className="text-sm text-green-700 dark:text-green-300">
+                  Tu cuenta ha sido actualizada a Premium. Recargando la página...
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {paymentStatus === 'failure' && (
+          <div className="mb-6 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg p-4">
+            <div className="flex items-center gap-3">
+              <Shield className="text-red-600 dark:text-red-400" size={24} />
+              <div>
+                <h3 className="font-semibold text-red-800 dark:text-red-200">Pago no completado</h3>
+                <p className="text-sm text-red-700 dark:text-red-300">
+                  El pago no pudo ser procesado. Por favor intenta nuevamente.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {paymentStatus === 'pending' && (
+          <div className="mb-6 bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
+            <div className="flex items-center gap-3">
+              <Clock className="text-yellow-600 dark:text-yellow-400" size={24} />
+              <div>
+                <h3 className="font-semibold text-yellow-800 dark:text-yellow-200">Pago pendiente</h3>
+                <p className="text-sm text-yellow-700 dark:text-yellow-300">
+                  Tu pago está siendo procesado. Te notificaremos cuando se complete.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Hero Section */}
         <div className="text-center mb-16 animate-fade-in">
           <div className="inline-block mb-6">
@@ -258,11 +375,17 @@ export default function PremiumPage() {
               className="w-full mt-auto bg-white text-gray-700 hover:bg-gray-100 font-bold" 
               size="lg"
               onClick={handleUpgrade}
+              disabled={isProcessing || session?.user?.isPremium === true}
             >
               {session?.user?.isPremium === true ? (
                 <>
                   <Crown className="mr-2" size={20} />
                   Ya eres Premium
+                </>
+              ) : isProcessing ? (
+                <>
+                  <Clock className="mr-2 animate-spin" size={20} />
+                  Procesando...
                 </>
               ) : (
                 <>
@@ -392,11 +515,17 @@ export default function PremiumPage() {
             size="lg" 
             className="bg-white text-gray-700 hover:bg-gray-100 text-lg px-8 py-6 font-bold"
             onClick={handleUpgrade}
+            disabled={isProcessing || session?.user?.isPremium === true}
           >
             {session?.user?.isPremium === true ? (
               <>
                 <Crown className="mr-2" size={20} />
                 Ya eres Premium
+              </>
+            ) : isProcessing ? (
+              <>
+                <Clock className="mr-2 animate-spin" size={20} />
+                Procesando...
               </>
             ) : (
               <>
