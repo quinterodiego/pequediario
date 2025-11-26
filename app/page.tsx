@@ -56,16 +56,16 @@ export default function Home() {
               </span>
             </div>
             
-            <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-extrabold mb-4 sm:mb-6 px-2">
+            <h1 className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-extrabold mb-4 sm:mb-6 px-2 break-words">
               <span className="bg-gradient-to-r from-[#8CCFE0] to-[#E9A5B4] bg-clip-text text-transparent">Peque</span>{' '}
               <span className="text-gray-700 dark:text-gray-200">Diario</span>{' '}
             </h1>
             
-            <p className="text-base sm:text-xl md:text-2xl lg:text-3xl text-gray-700 dark:text-gray-300 mb-6 sm:mb-10 max-w-3xl mx-auto leading-relaxed font-light px-4">
+            <p className="text-sm sm:text-xl md:text-2xl lg:text-3xl text-gray-700 dark:text-gray-300 mb-6 sm:mb-10 max-w-3xl mx-auto leading-relaxed font-light px-4 break-words">
               La app integral para padres que acompaña el{' '}
               <span className="font-semibold text-gray-700 dark:text-gray-200">crecimiento de tu hijo</span>.
               <br className="hidden md:block" />
-              <span className="text-gray-500 dark:text-gray-400">Crecimiento, sueño, alimentación, hitos y control de esfínteres en un solo lugar.</span>
+              <span className="text-gray-500 dark:text-gray-400 text-sm sm:text-base md:text-lg lg:text-xl">Crecimiento, sueño, alimentación, hitos y control de esfínteres en un solo lugar.</span>
             </p>
             
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center mb-12 sm:mb-16 px-4">
@@ -102,35 +102,35 @@ export default function Home() {
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-3 gap-3 sm:gap-6 md:gap-8 max-w-3xl mx-auto mt-12 sm:mt-20 px-4">
-              <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-xl sm:rounded-2xl p-3 sm:p-6 shadow-lg border border-white/20 dark:border-gray-700/20 hover-lift">
-                <div className="text-2xl sm:text-4xl md:text-5xl font-extrabold gradient-text mb-1 sm:mb-2">1000+</div>
-                <div className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 font-medium">Padres activos</div>
+            <div className="grid grid-cols-3 gap-2 sm:gap-6 md:gap-8 max-w-3xl mx-auto mt-12 sm:mt-20 px-2 sm:px-4">
+              <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-lg sm:rounded-2xl p-2 sm:p-6 shadow-lg border border-white/20 dark:border-gray-700/20 hover-lift overflow-hidden">
+                <div className="text-lg sm:text-4xl md:text-5xl font-extrabold gradient-text mb-1 sm:mb-2 truncate">1000+</div>
+                <div className="text-[10px] sm:text-sm text-gray-700 dark:text-gray-300 font-medium break-words leading-tight">Padres activos</div>
               </div>
-              <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-xl sm:rounded-2xl p-3 sm:p-6 shadow-lg border border-white/20 dark:border-gray-700/20 hover-lift">
-                <div className="text-2xl sm:text-4xl md:text-5xl font-extrabold gradient-text mb-1 sm:mb-2">5000+</div>
-                <div className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 font-medium">Registros totales</div>
+              <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-lg sm:rounded-2xl p-2 sm:p-6 shadow-lg border border-white/20 dark:border-gray-700/20 hover-lift overflow-hidden">
+                <div className="text-lg sm:text-4xl md:text-5xl font-extrabold gradient-text mb-1 sm:mb-2 truncate">5000+</div>
+                <div className="text-[10px] sm:text-sm text-gray-700 dark:text-gray-300 font-medium break-words leading-tight">Registros totales</div>
               </div>
-              <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-xl sm:rounded-2xl p-3 sm:p-6 shadow-lg border border-white/20 dark:border-gray-700/20 hover-lift">
-                <div className="text-2xl sm:text-4xl md:text-5xl font-extrabold gradient-text mb-1 sm:mb-2">4.9★</div>
-                <div className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 font-medium">Valoración</div>
+              <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-lg sm:rounded-2xl p-2 sm:p-6 shadow-lg border border-white/20 dark:border-gray-700/20 hover-lift overflow-hidden">
+                <div className="text-lg sm:text-4xl md:text-5xl font-extrabold gradient-text mb-1 sm:mb-2 truncate">4.9★</div>
+                <div className="text-[10px] sm:text-sm text-gray-700 dark:text-gray-300 font-medium break-words leading-tight">Valoración</div>
               </div>
             </div>
           </div>
         </section>
 
         {/* Features Section */}
-        <section className="relative container mx-auto px-4 py-24 bg-gray-50">
-          <div className="text-center mb-16 animate-fade-in">
-            <h2 className="text-4xl md:text-6xl font-extrabold text-gray-700 mb-6 tracking-tight">
+        <section className="relative container mx-auto px-3 sm:px-4 py-12 sm:py-24 bg-gray-50 overflow-hidden">
+          <div className="text-center mb-8 sm:mb-16 animate-fade-in px-2">
+            <h2 className="text-2xl sm:text-4xl md:text-6xl font-extrabold text-gray-700 mb-4 sm:mb-6 tracking-tight break-words">
               Todo para acompañar el crecimiento
             </h2>
-            <p className="text-xl md:text-2xl text-gray-700 max-w-3xl mx-auto font-light">
+            <p className="text-base sm:text-xl md:text-2xl text-gray-700 max-w-3xl mx-auto font-light px-2">
               Funcionalidades diseñadas para acompañar a tu hijo desde el nacimiento
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-7xl mx-auto px-2">
             <FeatureCard
               icon={<Droplet />}
               title="Registro de esfínteres"
@@ -172,28 +172,28 @@ export default function Home() {
         </section>
 
         {/* Pricing Section */}
-        <section className="container mx-auto px-4 py-16 bg-gray-50">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-700 mb-4">
+        <section className="container mx-auto px-3 sm:px-4 py-12 sm:py-16 bg-gray-50 overflow-hidden">
+          <div className="text-center mb-8 sm:mb-12 px-2">
+            <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold text-gray-700 mb-3 sm:mb-4 break-words">
               Planes que se adaptan a ti
             </h2>
-            <p className="text-xl text-gray-700 max-w-2xl mx-auto">
+            <p className="text-base sm:text-xl text-gray-700 max-w-2xl mx-auto break-words">
               Comienza gratis y actualiza cuando lo necesites
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto items-stretch">
+          <div className="grid md:grid-cols-2 gap-4 sm:gap-8 max-w-5xl mx-auto items-stretch px-2">
             {/* Free Plan */}
-            <div className="bg-white rounded-3xl shadow-xl p-8 border-2 border-gray-200 flex flex-col">
-              <div className="text-center mb-8">
-                <h3 className="text-2xl font-bold mb-2 text-gray-700">Gratis</h3>
-                <div className="text-5xl font-bold text-gray-700 mb-2">
+            <div className="bg-white rounded-2xl sm:rounded-3xl shadow-xl p-4 sm:p-8 border-2 border-gray-200 flex flex-col overflow-hidden">
+              <div className="text-center mb-6 sm:mb-8">
+                <h3 className="text-xl sm:text-2xl font-bold mb-2 text-gray-700">Gratis</h3>
+                <div className="text-3xl sm:text-5xl font-bold text-gray-700 mb-2">
                   $0
                 </div>
-                <p className="text-gray-700">Siempre gratis</p>
+                <p className="text-sm sm:text-base text-gray-700">Siempre gratis</p>
               </div>
               
-              <ul className="space-y-4 mb-8 flex-grow">
+              <ul className="space-y-3 sm:space-y-4 mb-6 sm:mb-8 flex-grow text-sm sm:text-base">
                 <li className="flex items-start">
                   <CheckCircle className="text-green-500 mr-3 mt-1 flex-shrink-0" size={20} />
                   <span>Registro de esfínteres (hasta 50 por mes)</span>
@@ -239,25 +239,25 @@ export default function Home() {
             </div>
 
             {/* Premium Plan */}
-            <div className="bg-[linear-gradient(135deg,#F8D77E,#F2C94C_40%,#D6A63A)] rounded-3xl shadow-2xl p-8 border-4 border-[#D6A63A] relative flex flex-col">
-              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                <span className="bg-white text-[#D6A63A] px-6 py-2 rounded-full text-sm font-bold shadow-lg">
+            <div className="bg-[linear-gradient(135deg,#F8D77E,#F2C94C_40%,#D6A63A)] rounded-2xl sm:rounded-3xl shadow-2xl p-4 sm:p-8 border-4 border-[#D6A63A] relative flex flex-col overflow-hidden">
+              <div className="absolute -top-3 sm:-top-4 left-1/2 transform -translate-x-1/2 z-10">
+                <span className="bg-white text-[#D6A63A] px-3 sm:px-6 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-bold shadow-lg whitespace-nowrap">
                   ⭐ Más Popular
                 </span>
               </div>
               
-              <div className="text-center mb-8 text-white">
+              <div className="text-center mb-6 sm:mb-8 text-white mt-2 sm:mt-0">
                 <div className="flex items-center justify-center mb-2">
-                  <Crown className="text-white mr-2" size={24} />
-                  <h3 className="text-2xl font-bold">Premium</h3>
+                  <Crown className="text-white mr-2" size={20} />
+                  <h3 className="text-xl sm:text-2xl font-bold">Premium</h3>
                 </div>
-                <div className="text-5xl font-bold mb-2">
+                <div className="text-3xl sm:text-5xl font-bold mb-2 break-words">
                   ${formatNumberAR(14999, 0)}
                 </div>
-                <p className="text-white/95">Pago único - Para siempre</p>
+                <p className="text-sm sm:text-base text-white/95">Pago único - Para siempre</p>
               </div>
               
-              <ul className="space-y-4 mb-8 text-white flex-grow">
+              <ul className="space-y-3 sm:space-y-4 mb-6 sm:mb-8 text-white flex-grow text-sm sm:text-base">
                 <li className="flex items-start">
                   <CheckCircle className="text-white mr-3 mt-1 flex-shrink-0" size={20} />
                   <span className="text-white"><strong>Todo lo gratis +</strong></span>
@@ -305,17 +305,17 @@ export default function Home() {
         </section>
 
         {/* Testimonials Section */}
-        <section className="container mx-auto px-4 py-16 bg-gray-50">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-700 mb-4">
+        <section className="container mx-auto px-3 sm:px-4 py-12 sm:py-16 bg-gray-50 overflow-hidden">
+          <div className="text-center mb-8 sm:mb-12 px-2">
+            <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold text-gray-700 mb-3 sm:mb-4 break-words">
               Lo que dicen los padres
             </h2>
-            <p className="text-xl text-gray-700 max-w-2xl mx-auto">
+            <p className="text-base sm:text-xl text-gray-700 max-w-2xl mx-auto break-words">
               Miles de padres confían en Chau Pañal
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-4 sm:gap-8 max-w-6xl mx-auto px-2">
             <TestimonialCard
               name="María González"
               location="Buenos Aires"
@@ -338,14 +338,14 @@ export default function Home() {
         </section>
 
         {/* FAQ Section */}
-        <section className="container mx-auto px-4 py-16 bg-gray-50">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-700 mb-4">
+        <section className="container mx-auto px-3 sm:px-4 py-12 sm:py-16 bg-gray-50 overflow-hidden">
+          <div className="text-center mb-8 sm:mb-12 px-2">
+            <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold text-gray-700 mb-3 sm:mb-4 break-words">
               Preguntas frecuentes
             </h2>
           </div>
 
-          <div className="max-w-3xl mx-auto space-y-6">
+          <div className="max-w-3xl mx-auto space-y-4 sm:space-y-6 px-2">
             <FAQItem
               question="¿Es realmente gratis?"
               answer="Sí, la versión gratuita es completamente gratis para siempre. Incluye registro de esfínteres (hasta 50 por mes), historial de últimos 30 días, estadísticas básicas, vista de calendario (30 días), edición y eliminación de registros, búsqueda y filtros, tips diarios y acceso a la comunidad."
@@ -370,12 +370,12 @@ export default function Home() {
         </section>
 
         {/* Final CTA Section */}
-        <section className="container mx-auto px-4 py-20 bg-gradient-to-r from-[#8CCFE0] to-[#E9A5B4] text-gray-700 text-center">
-          <div className="max-w-3xl mx-auto">
-            <h2 className="text-4xl md:text-6xl font-bold mb-6">
+        <section className="container mx-auto px-3 sm:px-4 py-12 sm:py-20 bg-gradient-to-r from-[#8CCFE0] to-[#E9A5B4] text-gray-700 text-center overflow-hidden">
+          <div className="max-w-3xl mx-auto px-2">
+            <h2 className="text-2xl sm:text-4xl md:text-6xl font-bold mb-4 sm:mb-6 break-words">
               ¿Listo para comenzar?
             </h2>
-            <p className="text-xl md:text-2xl mb-8 text-gray-700">
+            <p className="text-base sm:text-xl md:text-2xl mb-6 sm:mb-8 text-gray-700 break-words">
               Únete a miles de padres que ya están acompañando el crecimiento de sus hijos
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -427,24 +427,24 @@ interface FeatureCardProps {
 
 function FeatureCard({ icon, title, description, free, premium }: FeatureCardProps) {
   return (
-    <div className="group relative bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-primary-200 hover-lift">
-      <div className="flex items-center justify-between mb-6">
-        <div className="text-primary-600 bg-gradient-to-br from-primary-50 to-primary-100 p-4 rounded-2xl group-hover:scale-110 transition-transform duration-300 shadow-md">
+    <div className="group relative bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-3xl p-4 sm:p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-primary-200 hover-lift overflow-hidden">
+      <div className="flex items-center justify-between mb-4 sm:mb-6">
+        <div className="text-primary-600 bg-gradient-to-br from-primary-50 to-primary-100 p-2 sm:p-4 rounded-xl sm:rounded-2xl group-hover:scale-110 transition-transform duration-300 shadow-md">
           {icon}
         </div>
         {free && (
-          <span className="bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 text-xs px-4 py-1.5 rounded-full font-bold shadow-sm border border-green-200">
+          <span className="bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 text-[10px] sm:text-xs px-2 sm:px-4 py-1 sm:py-1.5 rounded-full font-bold shadow-sm border border-green-200 whitespace-nowrap">
             Gratis
           </span>
         )}
         {premium && (
-          <span className="bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 text-xs px-4 py-1.5 rounded-full font-bold shadow-sm border border-purple-200">
+          <span className="bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 text-[10px] sm:text-xs px-2 sm:px-4 py-1 sm:py-1.5 rounded-full font-bold shadow-sm border border-purple-200 whitespace-nowrap">
             Premium
           </span>
         )}
       </div>
-      <h4 className="font-bold text-xl mb-3 text-gray-700 group-hover:text-primary-600 transition-colors">{title}</h4>
-      <p className="text-gray-700 text-sm leading-relaxed">{description}</p>
+      <h4 className="font-bold text-base sm:text-xl mb-2 sm:mb-3 text-gray-700 group-hover:text-primary-600 transition-colors break-words">{title}</h4>
+      <p className="text-gray-700 text-xs sm:text-sm leading-relaxed break-words">{description}</p>
     </div>
   )
 }
@@ -458,16 +458,16 @@ interface TestimonialCardProps {
 
 function TestimonialCard({ name, location, rating, text }: TestimonialCardProps) {
   return (
-    <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-      <div className="flex items-center mb-4">
+    <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-100 overflow-hidden">
+      <div className="flex items-center mb-3 sm:mb-4">
         {[...Array(rating)].map((_, i) => (
-          <Star key={i} className="text-yellow-400 fill-yellow-400" size={20} />
+          <Star key={i} className="text-yellow-400 fill-yellow-400" size={16} />
         ))}
       </div>
-      <p className="text-gray-700 mb-4 leading-relaxed italic">"{text}"</p>
-      <div className="border-t border-gray-100 pt-4">
-        <p className="font-semibold text-gray-900">{name}</p>
-        <p className="text-sm text-gray-700">{location}</p>
+      <p className="text-sm sm:text-base text-gray-700 mb-3 sm:mb-4 leading-relaxed italic break-words">"{text}"</p>
+      <div className="border-t border-gray-100 pt-3 sm:pt-4">
+        <p className="font-semibold text-sm sm:text-base text-gray-900 break-words">{name}</p>
+        <p className="text-xs sm:text-sm text-gray-700 break-words">{location}</p>
       </div>
     </div>
   )
@@ -482,18 +482,18 @@ function FAQItem({ question, answer }: FAQItemProps) {
   const [isOpen, setIsOpen] = React.useState(false)
 
   return (
-    <div className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
+    <div className="bg-white rounded-lg sm:rounded-xl shadow-md border border-gray-200 overflow-hidden">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors"
+        className="w-full px-4 sm:px-6 py-3 sm:py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors gap-2"
       >
-        <span className="font-semibold text-gray-700">{question}</span>
-        <span className={`text-gray-700 transition-transform ${isOpen ? 'rotate-180' : ''}`}>
+        <span className="font-semibold text-sm sm:text-base text-gray-700 break-words flex-1 text-left">{question}</span>
+        <span className={`text-gray-700 transition-transform flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`}>
           ▼
         </span>
       </button>
       {isOpen && (
-        <div className="px-6 pb-4 text-gray-700 leading-relaxed">
+        <div className="px-4 sm:px-6 pb-3 sm:pb-4 text-xs sm:text-sm text-gray-700 leading-relaxed break-words">
           {answer}
         </div>
       )}

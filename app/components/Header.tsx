@@ -26,23 +26,23 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 backdrop-blur supports-[backdrop-filter]:bg-white/95 dark:supports-[backdrop-filter]:bg-gray-900/95 shadow-sm">
-      <div className="container flex h-16 items-center justify-between px-3 sm:px-4">
+      <div className="container flex h-16 items-center justify-between px-2 sm:px-4 overflow-hidden">
         <div 
-          className="flex items-center space-x-2 sm:space-x-3 cursor-pointer group flex-shrink-0"
+          className="flex items-center space-x-1.5 sm:space-x-3 cursor-pointer group flex-shrink-0 min-w-0"
           onClick={() => router.push('/')}
         >
-          <img src="/logo.png" alt="Peque Diario" width={40} height={40} />
+          <img src="/logo.png" alt="Peque Diario" width={32} height={32} className="sm:w-10 sm:h-10 flex-shrink-0" />
           
-          <div className="flex flex-col">
-            <h1 className="text-base sm:text-xl font-extrabold">
+          <div className="flex flex-col min-w-0">
+            <h1 className="text-sm sm:text-xl font-extrabold truncate">
               <span className="bg-gradient-to-r from-[#8CCFE0] to-[#E9A5B4] bg-clip-text text-transparent">Peque</span>{' '}
               <span className="text-gray-700 dark:text-gray-200">Diario</span>
             </h1>
-            <p className="text-xs text-gray-700 dark:text-gray-300 hidden sm:block">Acompañando el crecimiento de tu hijo</p>
+            <p className="text-[10px] sm:text-xs text-gray-700 dark:text-gray-300 hidden sm:block truncate">Acompañando el crecimiento de tu hijo</p>
           </div>
         </div>
         
-        <div className="flex items-center space-x-1 sm:space-x-2">
+        <div className="flex items-center space-x-0.5 sm:space-x-2 flex-shrink-0">
           {session ? (
             <>
               {!session.user?.isPremium && (
@@ -117,8 +117,8 @@ export function Header() {
                   onClick={() => setShowRegisterModal(true)}
                   className="bg-gradient-to-r from-[#8CCFE0] to-[#E9A5B4] hover:from-[#7CBFD0] hover:to-[#D995A4] text-gray-700 dark:text-gray-100 shadow-md hover:shadow-lg transition-all px-2 sm:px-3 text-xs sm:text-sm font-medium"
                 >
-                  <span className="hidden sm:inline">Registrarse</span>
-                  <span className="sm:hidden">Reg</span>
+                  <span className="sm:inline">Registrarse</span>
+                  {/* <span className="sm:hidden">Reg</span> */}
                 </Button>
               </div>
               <LoginModal open={showLoginModal} onOpenChange={setShowLoginModal} />
