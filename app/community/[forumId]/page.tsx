@@ -217,18 +217,18 @@ export default function ForumPage() {
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/30 dark:to-orange-900/30 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6"
+            className="bg-[linear-gradient(135deg,#F8D77E,#F2C94C_40%,#D6A63A)] border border-[#D6A63A] rounded-lg p-3 sm:p-4 mb-4 sm:mb-6"
           >
             <div className="flex items-start gap-2 sm:gap-3">
-              <Crown className="text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5 sm:mt-1" size={20} />
+              <Crown className="text-white flex-shrink-0 mt-0.5 sm:mt-1" size={20} />
               <div className="flex-1 min-w-0">
-                <p className="font-semibold text-gray-800 dark:text-gray-200 mb-1 text-sm sm:text-base">Versión Gratuita</p>
-                <p className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 mb-2">
+                <p className="font-semibold text-white mb-1 text-sm sm:text-base">Versión Gratuita</p>
+                <p className="text-xs sm:text-sm text-white/95 mb-2">
                   Puedes leer todos los posts y comentar (máximo 3 comentarios por día).
                   <Button
                     onClick={() => router.push('/premium')}
                     variant="link"
-                    className="ml-1 sm:ml-2 text-yellow-600 dark:text-yellow-400 underline p-0 h-auto text-xs sm:text-sm"
+                    className="ml-1 sm:ml-2 text-white underline p-0 h-auto text-xs sm:text-sm hover:text-white/80"
                   >
                     Actualiza a Premium
                   </Button>
@@ -356,7 +356,7 @@ export default function ForumPage() {
                     <div className="flex items-center gap-2 mb-1 sm:mb-2 flex-wrap">
                       <span className="font-semibold text-gray-800 dark:text-gray-100 text-sm sm:text-base">{post.userName}</span>
                       {isPremium && (
-                        <Crown className="text-yellow-500 dark:text-yellow-400 flex-shrink-0" size={12} />
+                        <Crown className="text-[#D6A63A] dark:text-[#F2C94C] flex-shrink-0" size={12} />
                       )}
                     </div>
                     <h3 className="text-lg sm:text-xl font-bold text-gray-800 dark:text-gray-100 mb-1 sm:mb-2 line-clamp-2">

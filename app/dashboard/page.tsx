@@ -134,31 +134,31 @@ export default function InicioPage() {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-xl mb-6 sm:mb-8 border-2 sm:border-4 border-yellow-300"
+          className="bg-[linear-gradient(135deg,#F8D77E,#F2C94C_40%,#D6A63A)] rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-xl mb-6 sm:mb-8 border-2 sm:border-4 border-[#D6A63A]"
         >
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
             <div className="flex items-start gap-3 sm:gap-4 flex-1">
-              <div className="bg-white/20 rounded-full p-2 sm:p-3 backdrop-blur-sm flex-shrink-0">
+              <div className="bg-white/25 rounded-full p-2 sm:p-3 backdrop-blur-sm flex-shrink-0">
                 <Crown className="text-white" size={24} />
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-1 sm:mb-2">
+                <h3 className="text-lg sm:text-xl md:text-2xl font-extrabold text-white mb-1 sm:mb-2 drop-shadow-lg [text-shadow:0_2px_8px_rgba(0,0,0,0.3)]">
                   ✨ Desbloquea todas las funcionalidades Premium
                 </h3>
-                <p className="text-white/95 text-xs sm:text-sm md:text-base mb-2 sm:mb-3">
+                <p className="text-white text-xs sm:text-sm md:text-base mb-2 sm:mb-3 font-semibold drop-shadow-md [text-shadow:0_1px_4px_rgba(0,0,0,0.25)]">
                   Registros ilimitados, historial completo, calendario sin límites, gestión de familia y más
                 </p>
-                <div className="flex flex-wrap gap-1.5 sm:gap-2 text-[10px] sm:text-xs md:text-sm text-white/90">
-                  <span className="bg-white/20 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded">✓ Sin límites</span>
-                  <span className="bg-white/20 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded">✓ Historial completo</span>
-                  <span className="bg-white/20 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded">✓ Exportar PDF</span>
-                  <span className="bg-white/20 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded">✓ Gestión familiar</span>
+                <div className="flex flex-wrap gap-1.5 sm:gap-2 text-[10px] sm:text-xs md:text-sm">
+                  <span className="bg-white/20 backdrop-blur-md px-1.5 sm:px-2 py-0.5 sm:py-1 rounded font-bold text-white drop-shadow-md [text-shadow:0_1px_3px_rgba(0,0,0,0.3)] border border-white/20">✓ Sin límites</span>
+                  <span className="bg-white/20 backdrop-blur-md px-1.5 sm:px-2 py-0.5 sm:py-1 rounded font-bold text-white drop-shadow-md [text-shadow:0_1px_3px_rgba(0,0,0,0.3)] border border-white/20">✓ Historial completo</span>
+                  <span className="bg-white/20 backdrop-blur-md px-1.5 sm:px-2 py-0.5 sm:py-1 rounded font-bold text-white drop-shadow-md [text-shadow:0_1px_3px_rgba(0,0,0,0.3)] border border-white/20">✓ Exportar PDF</span>
+                  <span className="bg-white/20 backdrop-blur-md px-1.5 sm:px-2 py-0.5 sm:py-1 rounded font-bold text-white drop-shadow-md [text-shadow:0_1px_3px_rgba(0,0,0,0.3)] border border-white/20">✓ Gestión familiar</span>
                 </div>
               </div>
             </div>
             <Button
               onClick={() => router.push('/premium')}
-              className="bg-white text-yellow-600 hover:bg-gray-100 font-bold px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base shadow-lg whitespace-nowrap w-full sm:w-auto"
+              className="bg-white text-[#D6A63A] hover:bg-gray-100 font-bold px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base shadow-lg whitespace-nowrap w-full sm:w-auto"
             >
               Ver Premium
               <ArrowRight className="ml-2" size={16} />

@@ -183,8 +183,8 @@ export function CalendarView({ activities, onDayClick, isPremium = false }: Cale
         </div>
       )}
       {isMonthOutOfRange && (
-        <div className="mb-4 p-3 bg-yellow-50 border border-yellow-300 rounded-lg">
-          <p className="text-sm text-yellow-800">
+        <div className="mb-4 p-3 bg-[linear-gradient(135deg,#F8D77E,#F2C94C_40%,#D6A63A)] border border-[#D6A63A] rounded-lg">
+          <p className="text-sm text-white">
             Este mes está fuera del rango permitido. Solo puedes ver los últimos {FREE_LIMIT_DAYS} días.
           </p>
         </div>

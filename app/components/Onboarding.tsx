@@ -43,7 +43,7 @@ export function Onboarding({ onComplete }: OnboardingProps) {
           <form onSubmit={(e) => { e.preventDefault(); setStep(2) }}>
             <div className="mb-6">
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Nombre del niño
+                Nombre del peque
               </label>
               <input
                 type="text"

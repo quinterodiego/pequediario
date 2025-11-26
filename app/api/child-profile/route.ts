@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import { GoogleSheetsService } from '@/lib/googleSheets'
+import { GoogleSheetsService, getGoogleSheetsConfig } from '@/lib/googleSheets'
 
 export const dynamic = 'force-dynamic'
 
@@ -36,16 +36,7 @@ export async function GET(request: NextRequest) {
     // Obtener fecha de nacimiento desde la hoja Familias (columna F)
     let birthDate = null
     try {
-      const { google } = require('googleapis')
-      const auth = new google.auth.GoogleAuth({
-        credentials: {
-          client_email: process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
-          private_key: process.env.GOOGLE_SHEETS_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-        },
-        scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-      })
-      const sheets = google.sheets({ version: 'v4', auth })
-      const SPREADSHEET_ID = process.env.GOOGLE_SHEETS_SPREADSHEET_ID
+      const { sheets, SPREADSHEET_ID } = getGoogleSheetsConfig()
 
       const response = await sheets.spreadsheets.values.get({
         spreadsheetId: SPREADSHEET_ID,
@@ -103,17 +94,8 @@ export async function POST(request: NextRequest) {
     // Verificar si ya tiene familia
     let familyInfo = await GoogleSheetsService.getFamilyInfo(userEmail)
     
-    // Guardar fecha de nacimiento en la hoja Familias (columna F)
-    const { google } = require('googleapis')
-    const auth = new google.auth.GoogleAuth({
-      credentials: {
-        client_email: process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
-        private_key: process.env.GOOGLE_SHEETS_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-      },
-      scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-    })
-    const sheets = google.sheets({ version: 'v4', auth })
-    const SPREADSHEET_ID = process.env.GOOGLE_SHEETS_SPREADSHEET_ID
+    // Obtener configuración de Google Sheets (usa el mismo formato de clave privada)
+    const { sheets, SPREADSHEET_ID } = getGoogleSheetsConfig()
 
     if (!familyInfo.familyId) {
       // Crear familia con el nombre del niño

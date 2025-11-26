@@ -170,17 +170,17 @@ export function FamilySettings({ isPremium }: FamilySettingsProps) {
           <Users className="text-purple-500" size={20} />
           <h2 className="text-xl font-bold text-gray-800">Gestión de Familia</h2>
         </div>
-        <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-lg p-4 border border-yellow-200">
+        <div className="bg-[linear-gradient(135deg,#F8D77E,#F2C94C_40%,#D6A63A)] rounded-lg p-4 border border-[#D6A63A]">
           <div className="flex items-start gap-3">
-            <Crown className="text-yellow-600 flex-shrink-0 mt-1" size={24} />
+            <Crown className="text-white flex-shrink-0 mt-1" size={24} />
             <div>
-              <p className="font-semibold text-gray-800 mb-2">Funcionalidad Premium</p>
-              <p className="text-sm text-gray-600 mb-3">
+              <p className="font-semibold text-white mb-2">Funcionalidad Premium</p>
+              <p className="text-sm text-white/95 mb-3">
                 Con Premium puedes compartir los registros con tu pareja y personalizar el nombre de tu hijo/a.
               </p>
               <Button
                 onClick={() => window.location.href = '/premium'}
-                className="bg-gradient-to-r from-yellow-400 to-yellow-600 hover:from-yellow-500 hover:to-yellow-700 text-white"
+                className="bg-white text-[#D6A63A] hover:bg-gray-100 font-semibold"
               >
                 <Crown className="mr-2" size={16} />
                 Actualizar a Premium
@@ -202,7 +202,7 @@ export function FamilySettings({ isPremium }: FamilySettingsProps) {
           <div className="flex items-center gap-2">
             <Users className="text-purple-500" size={20} />
             <h2 className="text-xl font-bold text-gray-800">Gestión de Familia</h2>
-            <Crown className="text-yellow-500 ml-2" size={16} />
+            <Crown className="text-[#D6A63A] ml-2" size={16} />
           </div>
           {isExpanded ? <ChevronUp size={20} className="text-gray-400" /> : <ChevronDown size={20} className="text-gray-400" />}
         </button>
@@ -231,7 +231,7 @@ export function FamilySettings({ isPremium }: FamilySettingsProps) {
         <div className="flex items-center gap-2">
           <Users className="text-purple-500" size={20} />
           <h2 className="text-xl font-bold text-gray-800">Gestión de Familia</h2>
-          <Crown className="text-yellow-500 ml-2" size={16} />
+          <Crown className="text-[#D6A63A] ml-2" size={16} />
         </div>
         <motion.div
           animate={{ rotate: isExpanded ? 180 : 0 }}

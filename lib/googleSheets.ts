@@ -29,6 +29,15 @@ const auth = new google.auth.GoogleAuth({
 const sheets = google.sheets({ version: 'v4', auth })
 const SPREADSHEET_ID = process.env.GOOGLE_SHEETS_SPREADSHEET_ID
 
+// Exportar función helper para obtener la configuración de sheets (para uso en otras APIs)
+export function getGoogleSheetsConfig() {
+  return {
+    sheets,
+    SPREADSHEET_ID,
+    auth,
+  }
+}
+
 export class GoogleSheetsService {
   // Guardar nuevo usuario
   static async saveUser(userData: {

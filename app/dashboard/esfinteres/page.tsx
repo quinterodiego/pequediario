@@ -261,7 +261,7 @@ export default function EsfinteresPage() {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 rounded-2xl p-6 shadow-xl mb-6 border-4 border-yellow-300"
+          className="bg-[linear-gradient(135deg,#F8D77E,#F2C94C_40%,#D6A63A)] rounded-2xl p-6 shadow-xl mb-6 border-4 border-[#D6A63A]"
         >
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-start gap-4 flex-1">
@@ -269,23 +269,23 @@ export default function EsfinteresPage() {
                 <Crown className="text-white" size={32} />
               </div>
               <div className="flex-1">
-                <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">
+                <h3 className="text-xl sm:text-2xl font-extrabold text-white mb-2 drop-shadow-lg [text-shadow:0_2px_8px_rgba(0,0,0,0.3)]">
                   🚀 Actualiza a Premium y desbloquea todo
                 </h3>
-                <p className="text-white/95 text-sm sm:text-base mb-3">
+                <p className="text-white text-sm sm:text-base mb-3 font-semibold drop-shadow-md [text-shadow:0_1px_4px_rgba(0,0,0,0.25)]">
                   Con Premium obtienes registros ilimitados, historial completo, calendario sin límites y más funcionalidades exclusivas
                 </p>
-                <div className="flex flex-wrap gap-2 text-xs sm:text-sm text-white/90">
-                  <span className="bg-white/20 px-2 py-1 rounded">✓ {FREE_LIMIT_MONTHLY}+ registros/mes</span>
-                  <span className="bg-white/20 px-2 py-1 rounded">✓ Historial completo</span>
-                  <span className="bg-white/20 px-2 py-1 rounded">✓ Calendario ilimitado</span>
-                  <span className="bg-white/20 px-2 py-1 rounded">✓ Exportar PDF</span>
+                <div className="flex flex-wrap gap-2 text-xs sm:text-sm">
+                  <span className="bg-white/40 backdrop-blur-md px-2 py-1 rounded font-bold text-white drop-shadow-md [text-shadow:0_1px_3px_rgba(0,0,0,0.3)] border border-white/20">✓ {FREE_LIMIT_MONTHLY}+ registros/mes</span>
+                  <span className="bg-white/40 backdrop-blur-md px-2 py-1 rounded font-bold text-white drop-shadow-md [text-shadow:0_1px_3px_rgba(0,0,0,0.3)] border border-white/20">✓ Historial completo</span>
+                  <span className="bg-white/40 backdrop-blur-md px-2 py-1 rounded font-bold text-white drop-shadow-md [text-shadow:0_1px_3px_rgba(0,0,0,0.3)] border border-white/20">✓ Calendario ilimitado</span>
+                  <span className="bg-white/40 backdrop-blur-md px-2 py-1 rounded font-bold text-white drop-shadow-md [text-shadow:0_1px_3px_rgba(0,0,0,0.3)] border border-white/20">✓ Exportar PDF</span>
                 </div>
               </div>
             </div>
             <Button
               onClick={() => router.push('/premium')}
-              className="bg-white text-yellow-600 hover:bg-gray-100 font-bold px-6 py-3 text-base shadow-lg whitespace-nowrap"
+              className="bg-white text-[#D6A63A] hover:bg-gray-100 font-bold px-6 py-3 text-base shadow-lg whitespace-nowrap"
             >
               Ver Premium
               <ArrowRight className="ml-2" size={18} />
@@ -296,12 +296,12 @@ export default function EsfinteresPage() {
 
       {/* Banner de límite alcanzado */}
       {isAtLimit && (
-        <div className="bg-yellow-100 dark:bg-yellow-900/30 border-l-4 border-yellow-500 dark:border-yellow-400 text-yellow-700 dark:text-yellow-300 p-4 mb-6 rounded">
+        <div className="bg-[linear-gradient(135deg,#F8D77E,#F2C94C_40%,#D6A63A)] border-l-4 border-[#D6A63A] text-white p-4 mb-6 rounded">
           <div className="flex items-center">
             <AlertCircle className="mr-2" size={20} />
             <div className="flex-1">
               <p className="font-semibold">Has alcanzado el límite de registros gratuitos</p>
-              <p className="text-sm">Actualiza a Premium para registros ilimitados y historial completo</p>
+              <p className="text-sm text-white/95">Actualiza a Premium para registros ilimitados y historial completo</p>
             </div>
             <Button onClick={() => router.push('/premium')} className="ml-4">
               <Crown className="mr-2" size={16} />
@@ -345,7 +345,7 @@ export default function EsfinteresPage() {
           <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
             {isPremium ? (
               <span className="flex items-center">
-                <Crown className="mr-2 text-yellow-500 flex-shrink-0" size={14} />
+                <Crown className="mr-2 text-[#D6A63A] flex-shrink-0" size={14} />
                 <span className="truncate">Cuenta Premium</span>
               </span>
             ) : (
@@ -800,7 +800,7 @@ export default function EsfinteresPage() {
           ) : (
             <Button
               onClick={() => router.push('/premium')}
-              className="h-24 bg-gradient-to-r from-yellow-400 to-yellow-600 hover:from-yellow-500 hover:to-yellow-700 text-white shadow-lg"
+              className="h-24 bg-[linear-gradient(135deg,#F8D77E,#F2C94C_40%,#D6A63A)] hover:opacity-90 text-white shadow-lg"
             >
               <Crown className="mr-3" size={24} />
               <div className="text-left">

@@ -183,7 +183,7 @@ export default function PostPage() {
               <div className="flex items-center gap-2 mb-2">
                 <span className="font-semibold text-gray-800 dark:text-gray-100">{post.userName}</span>
                 {isPremium && (
-                  <Crown className="text-yellow-500 dark:text-yellow-400" size={14} />
+                  <Crown className="text-[#D6A63A] dark:text-[#F2C94C]" size={14} />
                 )}
                 <span className="text-sm text-gray-500 dark:text-gray-400">
                   {new Date(post.timestamp).toLocaleDateString('es', {

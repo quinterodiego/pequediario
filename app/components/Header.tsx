@@ -50,9 +50,9 @@ export function Header() {
                   variant="outline"
                   size="sm"
                   onClick={() => router.push('/premium')}
-                  className="hidden sm:flex items-center gap-2 border-yellow-600 bg-white dark:bg-gray-800 text-yellow-600 dark:text-yellow-400 hover:text-yellow-600 hover:bg-gray-100 dark:hover:bg-gray-700 px-2 sm:px-3"
+                  className="hidden sm:flex items-center gap-2 border-[#D6A63A] bg-[linear-gradient(135deg,#F8D77E,#F2C94C_40%,#D6A63A)] text-white hover:opacity-90 dark:hover:opacity-90 px-2 sm:px-3"
                 >
-                  <Crown size={14} className="text-yellow-600 dark:text-yellow-400" />
+                  <Crown size={14} className="text-white" />
                   <span className="text-xs sm:text-sm">Premium</span>
                 </Button>
               )}

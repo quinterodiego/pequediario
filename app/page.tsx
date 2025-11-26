@@ -239,61 +239,61 @@ export default function Home() {
             </div>
 
             {/* Premium Plan */}
-            <div className="bg-gradient-to-br from-[#8CCFE0] to-[#E9A5B4] rounded-3xl shadow-2xl p-8 border-4 border-yellow-300 relative flex flex-col">
+            <div className="bg-[linear-gradient(135deg,#F8D77E,#F2C94C_40%,#D6A63A)] rounded-3xl shadow-2xl p-8 border-4 border-[#D6A63A] relative flex flex-col">
               <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                <span className="bg-yellow-400 text-gray-700 px-6 py-2 rounded-full text-sm font-bold shadow-lg">
+                <span className="bg-white text-[#D6A63A] px-6 py-2 rounded-full text-sm font-bold shadow-lg">
                   ⭐ Más Popular
                 </span>
               </div>
               
-              <div className="text-center mb-8 text-gray-700">
+              <div className="text-center mb-8 text-white">
                 <div className="flex items-center justify-center mb-2">
-                  <Crown className="text-yellow-500 mr-2" size={24} />
+                  <Crown className="text-white mr-2" size={24} />
                   <h3 className="text-2xl font-bold">Premium</h3>
                 </div>
                 <div className="text-5xl font-bold mb-2">
                   ${formatNumberAR(14999, 0)}
                 </div>
-                <p className="text-gray-700">Pago único - Para siempre</p>
+                <p className="text-white/95">Pago único - Para siempre</p>
               </div>
               
-              <ul className="space-y-4 mb-8 text-gray-700 flex-grow">
+              <ul className="space-y-4 mb-8 text-white flex-grow">
                 <li className="flex items-start">
-                  <CheckCircle className="text-yellow-500 mr-3 mt-1 flex-shrink-0" size={20} />
-                  <span className="text-gray-700"><strong>Todo lo gratis +</strong></span>
+                  <CheckCircle className="text-white mr-3 mt-1 flex-shrink-0" size={20} />
+                  <span className="text-white"><strong>Todo lo gratis +</strong></span>
                 </li>
                 <li className="flex items-start">
-                  <CheckCircle className="text-yellow-500 mr-3 mt-1 flex-shrink-0" size={20} />
+                  <CheckCircle className="text-white mr-3 mt-1 flex-shrink-0" size={20} />
                   <span>Registros ilimitados (sin límite mensual)</span>
                 </li>
                 <li className="flex items-start">
-                  <CheckCircle className="text-yellow-500 mr-3 mt-1 flex-shrink-0" size={20} />
+                  <CheckCircle className="text-white mr-3 mt-1 flex-shrink-0" size={20} />
                   <span>Historial completo (sin límite de días)</span>
                 </li>
                 <li className="flex items-start">
-                  <CheckCircle className="text-yellow-500 mr-3 mt-1 flex-shrink-0" size={20} />
+                  <CheckCircle className="text-white mr-3 mt-1 flex-shrink-0" size={20} />
                   <span>Calendario completo de progreso</span>
                 </li>
                 <li className="flex items-start">
-                  <CheckCircle className="text-yellow-500 mr-3 mt-1 flex-shrink-0" size={20} />
+                  <CheckCircle className="text-white mr-3 mt-1 flex-shrink-0" size={20} />
                   <span>Gestión de familia (múltiples bebés)</span>
                 </li>
                 <li className="flex items-start">
-                  <CheckCircle className="text-yellow-500 mr-3 mt-1 flex-shrink-0" size={20} />
+                  <CheckCircle className="text-white mr-3 mt-1 flex-shrink-0" size={20} />
                   <span>Compartir registros con familiares</span>
                 </li>
                 <li className="flex items-start">
-                  <CheckCircle className="text-yellow-500 mr-3 mt-1 flex-shrink-0" size={20} />
+                  <CheckCircle className="text-white mr-3 mt-1 flex-shrink-0" size={20} />
                   <span>Exportar registros para pediatra (PDF)</span>
                 </li>
                 <li className="flex items-start">
-                  <CheckCircle className="text-yellow-500 mr-3 mt-1 flex-shrink-0" size={20} />
+                  <CheckCircle className="text-white mr-3 mt-1 flex-shrink-0" size={20} />
                   <span>Modo oscuro</span>
                 </li>
               </ul>
               
               <Button 
-                className="w-full mt-auto bg-white text-blue-600 hover:bg-gray-100 font-bold" 
+                className="w-full mt-auto bg-white text-[#D6A63A] hover:bg-gray-100 font-bold" 
                 size="lg"
                 onClick={() => router.push('/premium')}
               >
