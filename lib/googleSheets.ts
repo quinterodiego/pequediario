@@ -5,13 +5,43 @@ import bcrypt from 'bcryptjs'
 function formatPrivateKey(key: string | undefined): string | undefined {
   if (!key) return undefined
   
-  // Reemplazar \\n por saltos de línea reales
-  let formatted = key.replace(/\\n/g, '\n')
+  // Eliminar espacios al inicio y final
+  let formatted = key.trim()
+  
+  // Reemplazar diferentes variantes de saltos de línea
+  // Vercel puede usar diferentes formatos
+  formatted = formatted.replace(/\\n/g, '\n')  // Reemplazar \n literal
+  formatted = formatted.replace(/\\\\n/g, '\n')  // Reemplazar \\n
+  formatted = formatted.replace(/\r\n/g, '\n')  // Windows line endings
+  formatted = formatted.replace(/\r/g, '\n')    // Mac line endings
+  
+  // Eliminar espacios extra alrededor de los saltos de línea
+  formatted = formatted.replace(/\s*\n\s*/g, '\n')
   
   // Asegurar que tenga los headers correctos
   if (!formatted.includes('BEGIN PRIVATE KEY') && !formatted.includes('BEGIN RSA PRIVATE KEY')) {
     // Si no tiene headers, asumimos que es solo el contenido
     formatted = `-----BEGIN PRIVATE KEY-----\n${formatted}\n-----END PRIVATE KEY-----\n`
+  } else {
+    // Asegurar que los headers estén correctamente formateados
+    formatted = formatted.replace(/-----BEGIN\s+PRIVATE\s+KEY-----/g, '-----BEGIN PRIVATE KEY-----')
+    formatted = formatted.replace(/-----END\s+PRIVATE\s+KEY-----/g, '-----END PRIVATE KEY-----')
+    formatted = formatted.replace(/-----BEGIN\s+RSA\s+PRIVATE\s+KEY-----/g, '-----BEGIN RSA PRIVATE KEY-----')
+    formatted = formatted.replace(/-----END\s+RSA\s+PRIVATE\s+KEY-----/g, '-----END RSA PRIVATE KEY-----')
+    
+    // Asegurar que haya un salto de línea después de BEGIN y antes de END
+    formatted = formatted.replace(/-----BEGIN PRIVATE KEY-----([^\n])/g, '-----BEGIN PRIVATE KEY-----\n$1')
+    formatted = formatted.replace(/([^\n])-----END PRIVATE KEY-----/g, '$1\n-----END PRIVATE KEY-----')
+    formatted = formatted.replace(/-----BEGIN RSA PRIVATE KEY-----([^\n])/g, '-----BEGIN RSA PRIVATE KEY-----\n$1')
+    formatted = formatted.replace(/([^\n])-----END RSA PRIVATE KEY-----/g, '$1\n-----END RSA PRIVATE KEY-----')
+  }
+  
+  // Eliminar líneas vacías al inicio y final
+  formatted = formatted.trim()
+  
+  // Asegurar que termine con un salto de línea
+  if (!formatted.endsWith('\n')) {
+    formatted += '\n'
   }
   
   return formatted
@@ -61,6 +91,30 @@ export class GoogleSheetsService {
       // E: Es_Premium
       // F: País
       // G: Password_Hash (⚠️ IMPORTANTE: Esta columna debe existir en el sheet)
+      
+      // Primero, obtener todas las filas para encontrar la última fila con datos en la columna A
+      const response = await sheets.spreadsheets.values.get({
+        spreadsheetId: SPREADSHEET_ID,
+        range: 'Usuarios!A:A', // Solo columna A para encontrar la última fila
+      })
+
+      const rows = response.data.values || []
+      
+      // Encontrar la última fila con datos en la columna A
+      let lastRowWithData = 0
+      
+      // Empezar desde la fila 1 (índice 0) y buscar hacia abajo
+      for (let i = 0; i < rows.length; i++) {
+        // Si la fila tiene datos en la columna A (no está vacía)
+        if (rows[i] && rows[i][0] && rows[i][0].toString().trim() !== '') {
+          lastRowWithData = i + 1 // +1 porque las filas en Sheets empiezan en 1
+        }
+      }
+      
+      // La siguiente fila será después de la última con datos
+      // Si no hay datos, empezar en la fila 2 (después del header)
+      const nextRow = lastRowWithData === 0 ? 2 : lastRowWithData + 1
+
       const values = [
         [
           new Date().toISOString(),        // A: Fecha_Registro
@@ -73,9 +127,10 @@ export class GoogleSheetsService {
         ]
       ]
 
-      await sheets.spreadsheets.values.append({
+      // Usar update en lugar de append para asegurar que se escriba en la fila correcta
+      await sheets.spreadsheets.values.update({
         spreadsheetId: SPREADSHEET_ID,
-        range: 'Usuarios!A:G', // ⚠️ Asegúrate de que la columna G existe en el sheet
+        range: `Usuarios!A${nextRow}:G${nextRow}`, // Rango específico desde columna A
         valueInputOption: 'RAW',
         requestBody: { values },
       })
