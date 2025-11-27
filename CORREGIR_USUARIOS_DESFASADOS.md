@@ -140,3 +140,4 @@ Si después de corregir los datos, los nuevos usuarios siguen creándose desfasa
 
 El código ahora está corregido para escribir siempre desde la columna A. Sin embargo, si tienes datos desfasados existentes, necesitas corregirlos manualmente siguiendo los pasos anteriores.
 
+

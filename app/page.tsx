@@ -172,7 +172,7 @@ export default function Home() {
         </section>
 
         {/* Pricing Section */}
-        <section className="container mx-auto px-3 sm:px-4 py-12 sm:py-16 bg-gray-50 overflow-hidden">
+        <section className="container mx-auto px-3 sm:px-4 py-12 sm:py-16 bg-gray-50">
           <div className="text-center mb-8 sm:mb-12 px-2">
             <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold text-gray-700 mb-3 sm:mb-4 break-words">
               Planes que se adaptan a ti
@@ -182,9 +182,9 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-4 sm:gap-8 max-w-5xl mx-auto items-stretch px-2">
+          <div className="grid md:grid-cols-2 gap-4 sm:gap-8 max-w-5xl mx-auto items-start px-2">
             {/* Free Plan */}
-            <div className="bg-white rounded-2xl sm:rounded-3xl shadow-xl p-4 sm:p-8 border-2 border-gray-200 flex flex-col overflow-hidden">
+            <div className="bg-white rounded-2xl sm:rounded-3xl shadow-xl p-4 sm:p-6 md:p-8 border-2 border-gray-200 flex flex-col h-full">
               <div className="text-center mb-6 sm:mb-8">
                 <h3 className="text-xl sm:text-2xl font-bold mb-2 text-gray-700">Gratis</h3>
                 <div className="text-3xl sm:text-5xl font-bold text-gray-700 mb-2">
@@ -196,35 +196,35 @@ export default function Home() {
               <ul className="space-y-3 sm:space-y-4 mb-6 sm:mb-8 flex-grow text-sm sm:text-base">
                 <li className="flex items-start">
                   <CheckCircle className="text-green-500 mr-3 mt-1 flex-shrink-0" size={20} />
-                  <span>Registro de esfínteres (hasta 50 por mes)</span>
+                  <span className="break-words">Registro de esfínteres (hasta 50 por mes)</span>
                 </li>
                 <li className="flex items-start">
                   <CheckCircle className="text-green-500 mr-3 mt-1 flex-shrink-0" size={20} />
-                  <span>Historial de últimos 30 días</span>
+                  <span className="break-words">Historial de últimos 30 días</span>
                 </li>
                 <li className="flex items-start">
                   <CheckCircle className="text-green-500 mr-3 mt-1 flex-shrink-0" size={20} />
-                  <span>Estadísticas básicas (contadores diarios)</span>
+                  <span className="break-words">Estadísticas básicas (contadores diarios)</span>
                 </li>
                 <li className="flex items-start">
                   <CheckCircle className="text-green-500 mr-3 mt-1 flex-shrink-0" size={20} />
-                  <span>Vista de calendario (últimos 30 días)</span>
+                  <span className="break-words">Vista de calendario (últimos 30 días)</span>
                 </li>
                 <li className="flex items-start">
                   <CheckCircle className="text-green-500 mr-3 mt-1 flex-shrink-0" size={20} />
-                  <span>Editar y eliminar registros</span>
+                  <span className="break-words">Editar y eliminar registros</span>
                 </li>
                 <li className="flex items-start">
                   <CheckCircle className="text-green-500 mr-3 mt-1 flex-shrink-0" size={20} />
-                  <span>Búsqueda y filtros de registros</span>
+                  <span className="break-words">Búsqueda y filtros de registros</span>
                 </li>
                 <li className="flex items-start">
                   <CheckCircle className="text-green-500 mr-3 mt-1 flex-shrink-0" size={20} />
-                  <span>Tips diarios sobre control de esfínteres</span>
+                  <span className="break-words">Tips diarios sobre control de esfínteres</span>
                 </li>
                 <li className="flex items-start">
                   <CheckCircle className="text-green-500 mr-3 mt-1 flex-shrink-0" size={20} />
-                  <span>Comunidad de padres</span>
+                  <span className="break-words">Comunidad de padres</span>
                 </li>
               </ul>
               
@@ -239,7 +239,7 @@ export default function Home() {
             </div>
 
             {/* Premium Plan */}
-            <div className="bg-[linear-gradient(135deg,#F8D77E,#F2C94C_40%,#D6A63A)] rounded-2xl sm:rounded-3xl shadow-2xl p-4 sm:p-8 border-4 border-[#D6A63A] relative flex flex-col overflow-hidden">
+            <div className="bg-[linear-gradient(135deg,#F8D77E,#F2C94C_40%,#D6A63A)] rounded-2xl sm:rounded-3xl shadow-2xl p-4 sm:p-6 md:p-8 border-4 border-[#D6A63A] relative flex flex-col h-full">
               <div className="absolute -top-3 sm:-top-4 left-1/2 transform -translate-x-1/2 z-10">
                 <span className="bg-white text-[#D6A63A] px-3 sm:px-6 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-bold shadow-lg whitespace-nowrap">
                   ⭐ Más Popular
@@ -260,35 +260,35 @@ export default function Home() {
               <ul className="space-y-3 sm:space-y-4 mb-6 sm:mb-8 text-white flex-grow text-sm sm:text-base">
                 <li className="flex items-start">
                   <CheckCircle className="text-white mr-3 mt-1 flex-shrink-0" size={20} />
-                  <span className="text-white"><strong>Todo lo gratis +</strong></span>
+                  <span className="text-white break-words"><strong>Todo lo gratis +</strong></span>
                 </li>
                 <li className="flex items-start">
                   <CheckCircle className="text-white mr-3 mt-1 flex-shrink-0" size={20} />
-                  <span>Registros ilimitados (sin límite mensual)</span>
+                  <span className="text-white break-words">Registros ilimitados (sin límite mensual)</span>
                 </li>
                 <li className="flex items-start">
                   <CheckCircle className="text-white mr-3 mt-1 flex-shrink-0" size={20} />
-                  <span>Historial completo (sin límite de días)</span>
+                  <span className="text-white break-words">Historial completo (sin límite de días)</span>
                 </li>
                 <li className="flex items-start">
                   <CheckCircle className="text-white mr-3 mt-1 flex-shrink-0" size={20} />
-                  <span>Calendario completo de progreso</span>
+                  <span className="text-white break-words">Calendario completo de progreso</span>
                 </li>
                 <li className="flex items-start">
                   <CheckCircle className="text-white mr-3 mt-1 flex-shrink-0" size={20} />
-                  <span>Gestión de familia (múltiples bebés)</span>
+                  <span className="text-white break-words">Gestión de familia (múltiples bebés)</span>
                 </li>
                 <li className="flex items-start">
                   <CheckCircle className="text-white mr-3 mt-1 flex-shrink-0" size={20} />
-                  <span>Compartir registros con familiares</span>
+                  <span className="text-white break-words">Compartir registros con familiares</span>
                 </li>
                 <li className="flex items-start">
                   <CheckCircle className="text-white mr-3 mt-1 flex-shrink-0" size={20} />
-                  <span>Exportar registros para pediatra (PDF)</span>
+                  <span className="text-white break-words">Exportar registros para pediatra (PDF)</span>
                 </li>
                 <li className="flex items-start">
                   <CheckCircle className="text-white mr-3 mt-1 flex-shrink-0" size={20} />
-                  <span>Modo oscuro</span>
+                  <span className="text-white break-words">Modo oscuro</span>
                 </li>
               </ul>
               
@@ -391,8 +391,7 @@ export default function Home() {
                   </Button>
                   <Button 
                     size="lg" 
-                    variant="outline"
-                    className="border-2 border-gray-700 text-gray-700 hover:bg-gray-700 hover:text-white text-lg px-8 py-6"
+                    className="bg-[linear-gradient(135deg,#F8D77E,#F2C94C_40%,#D6A63A)] hover:opacity-90 text-white border-2 border-[#D6A63A] text-lg px-8 py-6 font-bold shadow-lg"
                     onClick={() => router.push('/premium')}
                   >
                     <Crown className="mr-2" size={20} />
