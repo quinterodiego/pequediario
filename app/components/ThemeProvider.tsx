@@ -12,7 +12,6 @@ export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
       enableSystem={false}
       disableTransitionOnChange
       storageKey="peque-diario-theme"
-      suppressColorSchemeWarning
     >
       {children}
     </NextThemesProvider>
