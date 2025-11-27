@@ -75,6 +75,7 @@ export class GoogleSheetsService {
     name: string
     image?: string
     isPremium?: boolean
+    isAdmin?: boolean
     password?: string
   }) {
     try {
@@ -91,6 +92,7 @@ export class GoogleSheetsService {
       // E: Es_Premium
       // F: País
       // G: Password_Hash (⚠️ IMPORTANTE: Esta columna debe existir en el sheet)
+      // H: Es_Admin
       
       // Primero, obtener todas las filas para encontrar la última fila con datos en la columna A
       const response = await sheets.spreadsheets.values.get({
@@ -124,13 +126,14 @@ export class GoogleSheetsService {
           userData.isPremium || false,    // E: Es_Premium
           '',                              // F: País (opcional)
           hashedPassword,                  // G: Password_Hash
+          userData.isAdmin || false,      // H: Es_Admin
         ]
       ]
 
       // Usar update en lugar de append para asegurar que se escriba en la fila correcta
       await sheets.spreadsheets.values.update({
         spreadsheetId: SPREADSHEET_ID,
-        range: `Usuarios!A${nextRow}:G${nextRow}`, // Rango específico desde columna A
+        range: `Usuarios!A${nextRow}:H${nextRow}`, // Rango específico desde columna A hasta H
         valueInputOption: 'RAW',
         requestBody: { values },
       })
@@ -147,6 +150,7 @@ export class GoogleSheetsService {
     exists: boolean
     rowIndex: number
     isPremium: boolean
+    isAdmin: boolean
     name?: string
     image?: string
     passwordHash?: string
@@ -154,7 +158,7 @@ export class GoogleSheetsService {
     try {
       const response = await sheets.spreadsheets.values.get({
         spreadsheetId: SPREADSHEET_ID,
-        range: 'Usuarios!B:G', // B=Email, C=Nombre, D=Imagen, E=Premium, F=País, G=Password
+        range: 'Usuarios!B:H', // B=Email, C=Nombre, D=Imagen, E=Premium, F=País, G=Password, H=Admin
       })
 
       const rows = response.data.values
@@ -169,10 +173,11 @@ export class GoogleSheetsService {
       // row[3] = Premium (columna E)
       // row[4] = País (columna F)
       // row[5] = Password (columna G)
+      // row[6] = Admin (columna H)
       const userRowIndex = rows.findIndex((row, index) => index > 0 && row[0] === email)
       
       if (userRowIndex === -1) {
-        return { exists: false, rowIndex: -1, isPremium: false }
+        return { exists: false, rowIndex: -1, isPremium: false, isAdmin: false }
       }
 
       const userRow = rows[userRowIndex]
@@ -184,17 +189,26 @@ export class GoogleSheetsService {
                        premiumValue === 1 || 
                        premiumValue === '1'
       
+      // Verificar Admin de forma estricta
+      const adminValue = userRow[6]
+      const isAdmin = adminValue === true || 
+                     adminValue === 'TRUE' || 
+                     adminValue === 'true' || 
+                     adminValue === 1 || 
+                     adminValue === '1'
+      
       return {
         exists: true,
         rowIndex: userRowIndex, // Índice en el array (0=header, 1=primer usuario)
         isPremium: Boolean(isPremium),
+        isAdmin: Boolean(isAdmin),
         name: userRow[1],
         image: userRow[2],
         passwordHash: userRow[5] || undefined,
       }
     } catch (error) {
       console.error('Error verificando usuario:', error)
-      return { exists: false, rowIndex: -1, isPremium: false }
+      return { exists: false, rowIndex: -1, isPremium: false, isAdmin: false }
     }
   }
 
@@ -206,6 +220,7 @@ export class GoogleSheetsService {
       name?: string
       image?: string
       isPremium: boolean
+      isAdmin: boolean
     }
   }> {
     try {
@@ -228,6 +243,7 @@ export class GoogleSheetsService {
           name: user.name,
           image: user.image,
           isPremium: user.isPremium,
+          isAdmin: user.isAdmin,
         }
       }
     } catch (error) {
@@ -242,12 +258,19 @@ export class GoogleSheetsService {
     return user.isPremium
   }
 
+  // Verificar si usuario es admin
+  static async checkAdminStatus(email: string): Promise<boolean> {
+    const user = await this.getUserByEmail(email)
+    return user.isAdmin
+  }
+
   // Actualizar información del usuario existente
   static async updateUser(userData: {
     email: string
     name?: string
     image?: string
     isPremium?: boolean
+    isAdmin?: boolean
   }) {
     try {
       const user = await this.getUserByEmail(userData.email)
@@ -280,6 +303,13 @@ export class GoogleSheetsService {
         updates.push({
           range: `Usuarios!E${sheetRow}`,
           values: [[userData.isPremium]]
+        })
+      }
+
+      if (userData.isAdmin !== undefined) {
+        updates.push({
+          range: `Usuarios!H${sheetRow}`,
+          values: [[userData.isAdmin]]
         })
       }
 

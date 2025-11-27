@@ -35,6 +35,7 @@ export const authOptions: NextAuthOptions = {
           name: result.user.name || 'Usuario',
           image: result.user.image || undefined,
           isPremium: result.user.isPremium,
+          isAdmin: result.user.isAdmin || false,
         }
       }
     }),
@@ -47,16 +48,21 @@ export const authOptions: NextAuthOptions = {
         token.name = user.name
         token.picture = user.image
         token.isPremium = (user as any).isPremium || false
+        token.isAdmin = (user as any).isAdmin || false
       }
       
-      // Verificar premium status desde Google Sheets si hay email
+      // Verificar premium y admin status desde Google Sheets si hay email
       if (token.email) {
         try {
           const isPremium = await GoogleSheetsService.checkPremiumStatus(token.email as string)
           token.isPremium = isPremium
+          
+          const isAdmin = await GoogleSheetsService.checkAdminStatus(token.email as string)
+          token.isAdmin = isAdmin
         } catch (error) {
-          console.error('Error verificando premium:', error)
+          console.error('Error verificando premium/admin:', error)
           token.isPremium = false
+          token.isAdmin = false
         }
       }
       
@@ -69,6 +75,7 @@ export const authOptions: NextAuthOptions = {
         session.user.name = token.name as string
         session.user.image = token.picture as string
         session.user.isPremium = token.isPremium as boolean
+        session.user.isAdmin = token.isAdmin as boolean
       }
       return session
     },

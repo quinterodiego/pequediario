@@ -59,6 +59,16 @@ export function Header() {
               {session.user?.isPremium && (
                 <ThemeToggle />
               )}
+              {session.user?.isAdmin && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => router.push('/admin')}
+                  className="hidden sm:flex items-center gap-2 border-blue-500 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 px-2 sm:px-3"
+                >
+                  <span className="text-xs sm:text-sm">Admin</span>
+                </Button>
+              )}
               <div className="flex items-center space-x-0.5 sm:space-x-2">
                 {session.user?.image && (
                   <img 

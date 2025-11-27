@@ -8,10 +8,12 @@ declare module 'next-auth' {
       email?: string | null
       image?: string | null
       isPremium?: boolean
+      isAdmin?: boolean
     }
   }
   
   interface User {
     isPremium?: boolean
+    isAdmin?: boolean
   }
 }
