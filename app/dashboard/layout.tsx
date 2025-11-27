@@ -3,6 +3,7 @@
 import { MainNav } from '../components/MainNav'
 import { Header } from '../components/Header'
 import { Onboarding } from '../components/Onboarding'
+import { Tour } from '../components/Tour'
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
@@ -16,6 +17,7 @@ export default function DashboardLayout({
   const router = useRouter()
   const [hasProfile, setHasProfile] = useState<boolean | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [showTour, setShowTour] = useState(false)
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -60,6 +62,11 @@ export default function DashboardLayout({
 
       if (response.ok) {
         setHasProfile(true)
+        // Iniciar el tour después de completar el onboarding
+        // Esperar un momento para que el DOM se actualice
+        setTimeout(() => {
+          setShowTour(true)
+        }, 500)
       } else {
         alert('Error al guardar el perfil. Por favor, intenta nuevamente.')
       }
@@ -68,6 +75,21 @@ export default function DashboardLayout({
       alert('Error al guardar el perfil. Por favor, intenta nuevamente.')
     }
   }
+
+  useEffect(() => {
+    // Verificar si el usuario ya completó el tour
+    if (hasProfile === true) {
+      const tourCompleted = localStorage.getItem('tour-completed')
+      // Si no completó el tour y no está en proceso de onboarding, iniciarlo
+      if (!tourCompleted && !isLoading) {
+        // Esperar un momento para que el DOM se cargue completamente
+        const timer = setTimeout(() => {
+          setShowTour(true)
+        }, 1000)
+        return () => clearTimeout(timer)
+      }
+    }
+  }, [hasProfile, isLoading])
 
   if (status === 'loading' || isLoading) {
     return (
@@ -93,6 +115,7 @@ export default function DashboardLayout({
         {children}
       </main>
       <MainNav />
+      <Tour run={showTour} onComplete={() => setShowTour(false)} />
     </div>
   )
 }

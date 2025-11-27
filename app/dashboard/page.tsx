@@ -132,6 +132,7 @@ export default function InicioPage() {
       {/* Premium Banner (si no es premium) - Prominente al inicio */}
       {!isPremium && (
         <motion.div
+          id="tour-premium-banner"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="bg-[linear-gradient(135deg,#F8D77E,#F2C94C_40%,#D6A63A)] rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-xl mb-6 sm:mb-8 border-2 sm:border-4 border-[#D6A63A]"
@@ -219,7 +220,7 @@ export default function InicioPage() {
       )}
 
       {/* Accesos Rápidos */}
-      <div className="mb-8">
+      <div id="tour-quick-access" className="mb-8">
         <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4">Accesos Rápidos</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {sections.map((section, index) => {
@@ -268,6 +269,7 @@ export default function InicioPage() {
             <Droplet className="mx-auto text-gray-300 dark:text-gray-600 mb-4" size={48} />
             <p className="text-gray-600 dark:text-gray-400 mb-4">Aún no hay registros</p>
             <Button
+              id="tour-first-record"
               onClick={() => router.push('/dashboard/esfinteres/registro')}
               className="bg-gradient-to-r from-[#8CCFE0] to-[#E9A5B4] hover:from-[#7CBFD0] hover:to-[#D995A4] text-[#1E293B] dark:text-gray-100"
             >

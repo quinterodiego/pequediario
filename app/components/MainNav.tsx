@@ -10,7 +10,7 @@ const navItems = [
   { path: '/dashboard/sueno', icon: Moon, label: 'Sueño' },
   { path: '/dashboard/alimentacion', icon: Apple, label: 'Alimentación' },
   { path: '/dashboard/hitos', icon: Star, label: 'Hitos' },
-  { path: '/dashboard/esfinteres', icon: Droplet, label: 'Etapa Chau Pañal' },
+  { path: '/dashboard/esfinteres', icon: Droplet, label: 'Chau Pañal' },
   { path: '/dashboard/perfil', icon: Settings, label: 'Perfil' },
 ]
 
@@ -19,7 +19,7 @@ export function MainNav() {
   const router = useRouter()
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 z-50 safe-area-bottom">
+    <nav id="tour-main-nav" className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 z-50 safe-area-bottom">
       <div className="container mx-auto px-1 sm:px-2">
         <div className="flex justify-around items-center h-14 sm:h-16">
           {navItems.map((item) => {

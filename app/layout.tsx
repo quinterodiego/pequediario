@@ -36,14 +36,21 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" suppressHydrationWarning>
-      <head>
-        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-        <link rel="icon" href="/icon-192x192.png" type="image/png" sizes="192x192" />
-        <link rel="apple-touch-icon" href="/icon-192x192.png" />
-        <meta name="theme-color" content="#8CCFE0" />
-      </head>
-      <body className={`${inter.className} app-container`} suppressHydrationWarning>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+      <body className={`${inter.className} app-container`}>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var theme = localStorage.getItem('peque-diario-theme') || 'light';
+                  document.documentElement.classList.remove('light', 'dark');
+                  document.documentElement.classList.add(theme);
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+        <ThemeProvider attribute="class" defaultTheme="light">
           <AuthProvider>
             <AuthModalProvider>
               <div className="safe-area">

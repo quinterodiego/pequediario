@@ -25,7 +25,7 @@ export function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 backdrop-blur supports-[backdrop-filter]:bg-white/95 dark:supports-[backdrop-filter]:bg-gray-900/95 shadow-sm">
+    <header id="tour-header" className="sticky top-0 z-50 w-full border-b bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 backdrop-blur supports-[backdrop-filter]:bg-white/95 dark:supports-[backdrop-filter]:bg-gray-900/95 shadow-sm">
       <div className="container flex h-16 items-center justify-between px-2 sm:px-4 overflow-hidden">
         <div 
           className="flex items-center space-x-1.5 sm:space-x-3 cursor-pointer group flex-shrink-0 min-w-0"
