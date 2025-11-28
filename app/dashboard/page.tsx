@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Button } from '../components/ui/button'
 import { Home, Ruler, Moon, Apple, Star, Baby, Droplet, Clock, TrendingUp, Plus, ArrowRight, Crown } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { QuickRecordModals } from '../components/QuickRecordModals'
 
@@ -23,25 +23,42 @@ export default function InicioPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [isPremium, setIsPremium] = useState<boolean | null>(null)
   const [openQuickModal, setOpenQuickModal] = useState<'esfinteres' | 'crecimiento' | 'sueno' | 'alimentacion' | 'hitos' | null>(null)
+  const hasLoadedRef = useRef(false)
+  const lastUserEmailRef = useRef<string | null>(null)
 
+  // Cargar actividades solo cuando cambia el estado de autenticación o el usuario
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/')
+      hasLoadedRef.current = false
+      lastUserEmailRef.current = null
       return
     }
 
-    if (status === 'authenticated' && session?.user) {
-      // Verificar explícitamente si es Premium (puede ser undefined, null, false o true)
-      const premiumStatus = Boolean(session.user.isPremium === true)
-      console.log('Premium status check:', {
-        raw: session.user.isPremium,
-        boolean: premiumStatus,
-        user: session.user
-      })
-      setIsPremium(premiumStatus)
-      loadActivities()
+    if (status === 'authenticated' && session?.user?.email) {
+      const currentEmail = session.user.email
+      
+      // Solo cargar si es la primera vez o si cambió el usuario
+      if (!hasLoadedRef.current || lastUserEmailRef.current !== currentEmail) {
+        // Verificar explícitamente si es Premium (puede ser undefined, null, false o true)
+        const premiumStatus = Boolean(session.user.isPremium === true)
+        console.log('Premium status check:', {
+          raw: session.user.isPremium,
+          boolean: premiumStatus,
+          user: session.user
+        })
+        setIsPremium(premiumStatus)
+        loadActivities()
+        hasLoadedRef.current = true
+        lastUserEmailRef.current = currentEmail
+      } else {
+        // Si ya se cargó y es el mismo usuario, solo actualizar el estado de Premium si cambió
+        const premiumStatus = Boolean(session.user.isPremium === true)
+        setIsPremium(premiumStatus)
+      }
     }
-  }, [status, session, router])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status, session?.user?.email])
 
   const loadActivities = async () => {
     try {
@@ -163,7 +180,7 @@ export default function InicioPage() {
       modalType: 'esfinteres' as const,
       icon: Baby,
       iconColor: 'text-pink-500',
-      description: 'Chau Pañal - Control de esfínteres',
+      description: 'Control de esfínteres',
     },
   ]
 
@@ -219,9 +236,9 @@ export default function InicioPage() {
       </div> */}
 
       {/* Accesos Rápidos */}
-      <div id="tour-quick-access" className="mb-8">
-        <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4">Accesos Rápidos</h2>
-        <div className="grid grid-cols-5 gap-2 sm:gap-3">
+      <div id="tour-quick-access" className="mb-6 sm:mb-8">
+        <h2 className="text-lg sm:text-xl font-bold text-gray-800 dark:text-gray-100 mb-3 sm:mb-4">Accesos Rápidos</h2>
+        <div className="grid grid-cols-5 gap-1.5 sm:gap-3">
           {sections.map((section, index) => {
             const Icon = section.icon
             return (
@@ -234,13 +251,13 @@ export default function InicioPage() {
               >
                 <Button
                   onClick={() => setOpenQuickModal(section.modalType)}
-                  className="w-full h-20 sm:h-24 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-100 shadow-lg border border-gray-200 dark:border-gray-700 flex flex-col items-center justify-center gap-1 sm:gap-2 px-2 py-1.5"
+                  className="w-full h-16 sm:h-24 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-100 shadow-md sm:shadow-lg border border-gray-200 dark:border-gray-700 flex flex-col items-center justify-center gap-0.5 sm:gap-2 px-1 sm:px-2 py-1 sm:py-1.5 active:scale-95 transition-transform"
                   variant="outline"
                 >
-                  <Icon className={section.iconColor} size={20} />
-                  <div className="text-center">
-                    <p className="font-semibold text-sm">{section.name}</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">{section.description}</p>
+                  <Icon className={section.iconColor} size={18} />
+                  <div className="text-center w-full">
+                    <p className="font-semibold text-[10px] sm:text-sm leading-tight">{section.name}</p>
+                    <p className="text-[9px] sm:text-xs text-gray-500 dark:text-gray-400 leading-tight hidden sm:block">{section.description}</p>
                   </div>
                 </Button>
               </motion.div>
@@ -251,45 +268,47 @@ export default function InicioPage() {
 
       {/* Resumen del día - Todas las actividades */}
       {(todayStats.esfinteres > 0 || todayStats.alimentacion > 0 || todayStats.sueno > 0 || todayStats.crecimiento > 0 || todayStats.hitos > 0) && (
-        <div className="mb-8 space-y-4">
-          <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">Resumen del día</h2>
+        <div className="mb-6 sm:mb-8 space-y-3 sm:space-y-4">
+          <h2 className="text-lg sm:text-xl font-bold text-gray-800 dark:text-gray-100">Resumen del día</h2>
           
           {/* Esfínteres */}
           {todayStats.esfinteres > 0 && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700"
+              className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-md sm:shadow-lg border border-gray-200 dark:border-gray-700"
             >
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <Baby className="text-pink-500" size={32} />
-                  <div>
-                    <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100">Chau Pañal - Control de Esfínteres</h3>
-                    <p className="text-gray-600 dark:text-gray-400 text-sm">{todayStats.esfinteres} registro{todayStats.esfinteres !== 1 ? 's' : ''}</p>
+              <div className="flex items-center justify-between mb-3 sm:mb-4">
+                <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+                  <Baby className="text-pink-500 flex-shrink-0" size={24} />
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-base sm:text-xl font-bold text-gray-800 dark:text-gray-100 truncate">Chau Pañal - Control de Esfínteres</h3>
+                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">{todayStats.esfinteres} registro{todayStats.esfinteres !== 1 ? 's' : ''}</p>
                   </div>
                 </div>
                 <Button
                   onClick={() => router.push('/dashboard/esfinteres')}
                   variant="outline"
-                  className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300"
+                  size="sm"
+                  className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-xs sm:text-sm px-2 sm:px-3 flex-shrink-0"
                 >
-                  Ver todo
-                  <ArrowRight className="ml-2" size={16} />
+                  <span className="hidden sm:inline">Ver todo</span>
+                  <span className="sm:hidden">Ver</span>
+                  <ArrowRight className="ml-1 sm:ml-2" size={14} />
                 </Button>
               </div>
-              <div className="grid grid-cols-3 gap-4">
-                <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 text-center">
-                  <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">{todayStats.pis}</p>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">Pis</p>
+              <div className="grid grid-cols-3 gap-2 sm:gap-4">
+                <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-2 sm:p-3 text-center">
+                  <p className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-100">{todayStats.pis}</p>
+                  <p className="text-[10px] sm:text-xs text-gray-600 dark:text-gray-400">Pis</p>
                 </div>
-                <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 text-center">
-                  <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">{todayStats.caca}</p>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">Caca</p>
+                <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-2 sm:p-3 text-center">
+                  <p className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-100">{todayStats.caca}</p>
+                  <p className="text-[10px] sm:text-xs text-gray-600 dark:text-gray-400">Caca</p>
                 </div>
-                <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 text-center">
-                  <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">{todayStats.seco}</p>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">Seco</p>
+                <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-2 sm:p-3 text-center">
+                  <p className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-100">{todayStats.seco}</p>
+                  <p className="text-[10px] sm:text-xs text-gray-600 dark:text-gray-400">Seco</p>
                 </div>
               </div>
             </motion.div>
@@ -300,23 +319,25 @@ export default function InicioPage() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700"
+              className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-md sm:shadow-lg border border-gray-200 dark:border-gray-700"
             >
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <Apple className="text-green-500" size={32} />
-                  <div>
-                    <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100">Alimentación</h3>
-                    <p className="text-gray-600 dark:text-gray-400 text-sm">{todayStats.alimentacion} registro{todayStats.alimentacion !== 1 ? 's' : ''} de hoy</p>
+                <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+                  <Apple className="text-green-500 flex-shrink-0" size={24} />
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-base sm:text-xl font-bold text-gray-800 dark:text-gray-100 truncate">Alimentación</h3>
+                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">{todayStats.alimentacion} registro{todayStats.alimentacion !== 1 ? 's' : ''} de hoy</p>
                   </div>
                 </div>
                 <Button
                   onClick={() => router.push('/dashboard/alimentacion')}
                   variant="outline"
-                  className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300"
+                  size="sm"
+                  className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-xs sm:text-sm px-2 sm:px-3 flex-shrink-0"
                 >
-                  Ver todo
-                  <ArrowRight className="ml-2" size={16} />
+                  <span className="hidden sm:inline">Ver todo</span>
+                  <span className="sm:hidden">Ver</span>
+                  <ArrowRight className="ml-1 sm:ml-2" size={14} />
                 </Button>
               </div>
             </motion.div>
@@ -327,23 +348,25 @@ export default function InicioPage() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700"
+              className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-md sm:shadow-lg border border-gray-200 dark:border-gray-700"
             >
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <Moon className="text-indigo-500" size={32} />
-                  <div>
-                    <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100">Sueño</h3>
-                    <p className="text-gray-600 dark:text-gray-400 text-sm">{todayStats.sueno} registro{todayStats.sueno !== 1 ? 's' : ''} de hoy</p>
+                <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+                  <Moon className="text-indigo-500 flex-shrink-0" size={24} />
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-base sm:text-xl font-bold text-gray-800 dark:text-gray-100 truncate">Sueño</h3>
+                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">{todayStats.sueno} registro{todayStats.sueno !== 1 ? 's' : ''} de hoy</p>
                   </div>
                 </div>
                 <Button
                   onClick={() => router.push('/dashboard/sueno')}
                   variant="outline"
-                  className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300"
+                  size="sm"
+                  className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-xs sm:text-sm px-2 sm:px-3 flex-shrink-0"
                 >
-                  Ver todo
-                  <ArrowRight className="ml-2" size={16} />
+                  <span className="hidden sm:inline">Ver todo</span>
+                  <span className="sm:hidden">Ver</span>
+                  <ArrowRight className="ml-1 sm:ml-2" size={14} />
                 </Button>
               </div>
             </motion.div>
@@ -354,23 +377,25 @@ export default function InicioPage() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700"
+              className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-md sm:shadow-lg border border-gray-200 dark:border-gray-700"
             >
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <Ruler className="text-blue-500" size={32} />
-                  <div>
-                    <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100">Crecimiento</h3>
-                    <p className="text-gray-600 dark:text-gray-400 text-sm">{todayStats.crecimiento} registro{todayStats.crecimiento !== 1 ? 's' : ''} de hoy</p>
+                <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+                  <Ruler className="text-blue-500 flex-shrink-0" size={24} />
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-base sm:text-xl font-bold text-gray-800 dark:text-gray-100 truncate">Crecimiento</h3>
+                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">{todayStats.crecimiento} registro{todayStats.crecimiento !== 1 ? 's' : ''} de hoy</p>
                   </div>
                 </div>
                 <Button
                   onClick={() => router.push('/dashboard/crecimiento')}
                   variant="outline"
-                  className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300"
+                  size="sm"
+                  className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-xs sm:text-sm px-2 sm:px-3 flex-shrink-0"
                 >
-                  Ver todo
-                  <ArrowRight className="ml-2" size={16} />
+                  <span className="hidden sm:inline">Ver todo</span>
+                  <span className="sm:hidden">Ver</span>
+                  <ArrowRight className="ml-1 sm:ml-2" size={14} />
                 </Button>
               </div>
             </motion.div>
@@ -381,23 +406,25 @@ export default function InicioPage() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700"
+              className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-md sm:shadow-lg border border-gray-200 dark:border-gray-700"
             >
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <Star className="text-purple-500" size={32} />
-                  <div>
-                    <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100">Hitos</h3>
-                    <p className="text-gray-600 dark:text-gray-400 text-sm">{todayStats.hitos} hito{todayStats.hitos !== 1 ? 's' : ''} registrado{todayStats.hitos !== 1 ? 's' : ''} hoy</p>
+                <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+                  <Star className="text-purple-500 flex-shrink-0" size={24} />
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-base sm:text-xl font-bold text-gray-800 dark:text-gray-100 truncate">Hitos</h3>
+                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">{todayStats.hitos} hito{todayStats.hitos !== 1 ? 's' : ''} registrado{todayStats.hitos !== 1 ? 's' : ''} hoy</p>
                   </div>
                 </div>
                 <Button
                   onClick={() => router.push('/dashboard/hitos')}
                   variant="outline"
-                  className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300"
+                  size="sm"
+                  className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-xs sm:text-sm px-2 sm:px-3 flex-shrink-0"
                 >
-                  Ver todo
-                  <ArrowRight className="ml-2" size={16} />
+                  <span className="hidden sm:inline">Ver todo</span>
+                  <span className="sm:hidden">Ver</span>
+                  <ArrowRight className="ml-1 sm:ml-2" size={14} />
                 </Button>
               </div>
             </motion.div>
@@ -406,25 +433,25 @@ export default function InicioPage() {
       )}
 
       {/* Últimos Registros */}
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">Últimos Registros</h2>
+      <div className="mb-6 sm:mb-8">
+        <div className="flex items-center justify-between mb-3 sm:mb-4">
+          <h2 className="text-lg sm:text-xl font-bold text-gray-800 dark:text-gray-100">Últimos Registros</h2>
         </div>
         {recentActivities.length === 0 ? (
-          <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg text-center border border-gray-200 dark:border-gray-700">
-            <Droplet className="mx-auto text-gray-300 dark:text-gray-600 mb-4" size={48} />
-            <p className="text-gray-600 dark:text-gray-400 mb-4">Aún no hay registros</p>
+          <div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl p-6 sm:p-8 shadow-md sm:shadow-lg text-center border border-gray-200 dark:border-gray-700">
+            <Droplet className="mx-auto text-gray-300 dark:text-gray-600 mb-3 sm:mb-4" size={40} />
+            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mb-3 sm:mb-4">Aún no hay registros</p>
             <Button
               id="tour-first-record"
               onClick={() => setOpenQuickModal('esfinteres')}
-              className="bg-gradient-to-r from-[#8CCFE0] to-[#E9A5B4] hover:from-[#7CBFD0] hover:to-[#D995A4] text-[#1E293B] dark:text-gray-100"
+              className="bg-gradient-to-r from-[#8CCFE0] to-[#E9A5B4] hover:from-[#7CBFD0] hover:to-[#D995A4] text-[#1E293B] dark:text-gray-100 text-sm sm:text-base px-4 sm:px-6 py-2 sm:py-3"
             >
-              <Plus className="mr-2" size={18} />
+              <Plus className="mr-2" size={16} />
               Crear Primer Registro
             </Button>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-2 sm:space-y-3">
             {recentActivities.map((activity, index) => {
               const getActivityInfo = () => {
                 switch (activity.type) {
@@ -497,17 +524,17 @@ export default function InicioPage() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.05 }}
                   onClick={() => router.push(activityInfo.href)}
-                  className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-md hover:shadow-lg transition-shadow cursor-pointer border border-gray-200 dark:border-gray-700"
+                  className="bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-sm sm:shadow-md hover:shadow-md sm:hover:shadow-lg transition-shadow cursor-pointer border border-gray-200 dark:border-gray-700 active:scale-[0.98]"
                 >
-                  <div className="flex items-center gap-4">
-                    <div className={`w-12 h-12 rounded-full flex items-center justify-center ${activityInfo.iconBg}`}>
-                      <Icon size={24} />
+                  <div className="flex items-center gap-3 sm:gap-4">
+                    <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center flex-shrink-0 ${activityInfo.iconBg}`}>
+                      <Icon size={20} />
                     </div>
-                    <div className="flex-1">
-                      <p className="font-semibold text-gray-800 dark:text-gray-100">
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-sm sm:text-base text-gray-800 dark:text-gray-100 truncate">
                         {activityInfo.title}
                       </p>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                      <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                         {new Date(activity.timestamp).toLocaleString('es', {
                           day: '2-digit',
                           month: '2-digit',
@@ -516,7 +543,7 @@ export default function InicioPage() {
                         })}
                       </p>
                     </div>
-                    <Clock className="text-gray-400 dark:text-gray-500" size={18} />
+                    <Clock className="text-gray-400 dark:text-gray-500 flex-shrink-0" size={16} />
                   </div>
                 </motion.div>
               )
