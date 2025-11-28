@@ -194,10 +194,14 @@ export default function UsersPage() {
                               {user.name || 'Sin nombre'}
                             </h3>
                             {user.isPremium && (
-                              <Crown className="h-4 w-4 text-yellow-500" title="Premium" />
+                              <span title="Premium">
+                                <Crown className="h-4 w-4 text-yellow-500" />
+                              </span>
                             )}
                             {user.isAdmin && (
-                              <Shield className="h-4 w-4 text-blue-500" title="Administrador" />
+                              <span title="Administrador">
+                                <Shield className="h-4 w-4 text-blue-500" />
+                              </span>
                             )}
                           </div>
                           <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
