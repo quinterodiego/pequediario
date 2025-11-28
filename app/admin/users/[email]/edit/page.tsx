@@ -1,12 +1,12 @@
 'use client'
 
-import { useAdmin } from '../../../hooks/useAdmin'
+import { useAdmin } from '../../../../hooks/useAdmin'
 import { useRouter, useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../../components/ui/card'
-import { Button } from '../../../components/ui/button'
-import { Input } from '../../../components/ui/input'
-import { Label } from '../../../components/ui/label'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../../../components/ui/card'
+import { Button } from '../../../../components/ui/button'
+import { Input } from '../../../../components/ui/input'
+import { Label } from '../../../../components/ui/label'
 import { ArrowLeft, Save, Loader2 } from 'lucide-react'
 
 export default function EditUserPage() {
