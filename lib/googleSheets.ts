@@ -264,6 +264,70 @@ export class GoogleSheetsService {
     return user.isAdmin
   }
 
+  // Obtener todos los usuarios (solo para administradores)
+  static async getAllUsers(): Promise<Array<{
+    email: string
+    name?: string
+    image?: string
+    isPremium: boolean
+    isAdmin: boolean
+    registrationDate?: string
+    country?: string
+  }>> {
+    try {
+      const response = await sheets.spreadsheets.values.get({
+        spreadsheetId: SPREADSHEET_ID,
+        range: 'Usuarios!A:H', // Todas las columnas
+      })
+
+      const rows = response.data.values
+      if (!rows || rows.length <= 1) {
+        return []
+      }
+
+      // Saltar el header (fila 0) y procesar todos los usuarios
+      const users = rows.slice(1).map((row) => {
+        // row[0] = Fecha_Registro (columna A)
+        // row[1] = Email (columna B)
+        // row[2] = Nombre (columna C)
+        // row[3] = Imagen (columna D)
+        // row[4] = Premium (columna E)
+        // row[5] = País (columna F)
+        // row[6] = Password (columna G)
+        // row[7] = Admin (columna H)
+
+        const premiumValue = row[4]
+        const isPremium = premiumValue === true || 
+                         premiumValue === 'TRUE' || 
+                         premiumValue === 'true' || 
+                         premiumValue === 1 || 
+                         premiumValue === '1'
+
+        const adminValue = row[7]
+        const isAdmin = adminValue === true || 
+                       adminValue === 'TRUE' || 
+                       adminValue === 'true' || 
+                       adminValue === 1 || 
+                       adminValue === '1'
+
+        return {
+          email: row[1] || '',
+          name: row[2] || undefined,
+          image: row[3] || undefined,
+          isPremium: Boolean(isPremium),
+          isAdmin: Boolean(isAdmin),
+          registrationDate: row[0] || undefined,
+          country: row[5] || undefined,
+        }
+      }).filter(user => user.email) // Filtrar filas sin email
+
+      return users
+    } catch (error) {
+      console.error('Error obteniendo usuarios:', error)
+      return []
+    }
+  }
+
   // Actualizar información del usuario existente
   static async updateUser(userData: {
     email: string

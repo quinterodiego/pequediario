@@ -64,23 +64,28 @@ export default function CrecimientoPage() {
     if (record) {
       setEditingRecord(record)
       const recordDate = new Date(record.timestamp)
+      const localDate = `${recordDate.getFullYear()}-${String(recordDate.getMonth() + 1).padStart(2, '0')}-${String(recordDate.getDate()).padStart(2, '0')}`
+      const localTime = `${String(recordDate.getHours()).padStart(2, '0')}:${String(recordDate.getMinutes()).padStart(2, '0')}`
       setFormData({
         weight: record.weight ? formatNumberAR(record.weight, 1) : '',
         height: record.height ? formatNumberAR(record.height, 1) : '',
         headCircumference: record.headCircumference ? formatNumberAR(record.headCircumference, 1) : '',
         notes: record.notes || '',
-        date: recordDate.toISOString().split('T')[0],
-        time: `${String(recordDate.getHours()).padStart(2, '0')}:${String(recordDate.getMinutes()).padStart(2, '0')}`,
+        date: localDate,
+        time: localTime,
       })
     } else {
       setEditingRecord(null)
+      const now = new Date()
+      const localDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
+      const localTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`
       setFormData({
         weight: '',
         height: '',
         headCircumference: '',
         notes: '',
-        date: new Date().toISOString().split('T')[0],
-        time: new Date().toTimeString().slice(0, 5),
+        date: localDate,
+        time: localTime,
       })
     }
     setShowModal(true)
@@ -89,13 +94,16 @@ export default function CrecimientoPage() {
   const handleCloseModal = () => {
     setShowModal(false)
     setEditingRecord(null)
+    const now = new Date()
+    const localDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
+    const localTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`
     setFormData({
       weight: '',
       height: '',
       headCircumference: '',
       notes: '',
-      date: new Date().toISOString().split('T')[0],
-      time: new Date().toTimeString().slice(0, 5),
+      date: localDate,
+      time: localTime,
     })
   }
 

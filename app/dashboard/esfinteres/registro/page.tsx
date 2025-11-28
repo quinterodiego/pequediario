@@ -16,28 +16,38 @@ export default function RegistroPage() {
   const [esfinterType, setEsfinterType] = useState('pipi')
   const [esfinterNotes, setEsfinterNotes] = useState('')
   
+  // Helper para obtener fecha en formato YYYY-MM-DD en zona horaria local
+  const getLocalDateString = (date: Date = new Date()): string => {
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+    return `${year}-${month}-${day}`
+  }
+
+  // Helper para obtener hora en formato HH:MM en zona horaria local
+  const getLocalTimeString = (date: Date = new Date()): string => {
+    const hours = String(date.getHours()).padStart(2, '0')
+    const minutes = String(date.getMinutes()).padStart(2, '0')
+    return `${hours}:${minutes}`
+  }
+
   // Fecha y hora del registro (por defecto: ahora)
   const getNow = () => new Date()
-  const [selectedDate, setSelectedDate] = useState(() => {
-    const now = getNow()
-    return now.toISOString().split('T')[0] // YYYY-MM-DD
-  })
-  const [selectedTime, setSelectedTime] = useState(() => {
-    const now = getNow()
-    return `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}` // HH:MM
-  })
+  const [selectedDate, setSelectedDate] = useState(() => getLocalDateString())
+  const [selectedTime, setSelectedTime] = useState(() => getLocalTimeString())
   
   // Obtener fecha máxima (hoy) para el datepicker
-  const maxDate = getNow().toISOString().split('T')[0]
+  const maxDate = getLocalDateString()
 
   const handleSubmit = async () => {
     setIsSubmitting(true)
     setError(null)
 
-    // Combinar fecha y hora seleccionadas
-    const [hours, minutes] = selectedTime.split(':')
-    const customTimestamp = new Date(selectedDate)
-    customTimestamp.setHours(parseInt(hours), parseInt(minutes), 0, 0)
+    // Combinar fecha y hora seleccionadas en zona horaria local
+    const [year, month, day] = selectedDate.split('-').map(Number)
+    const [hours, minutes] = selectedTime.split(':').map(Number)
+    // Crear fecha directamente en hora local para evitar problemas de UTC
+    const customTimestamp = new Date(year, month - 1, day, hours, minutes, 0, 0)
 
     const details = {
       type: esfinterType,

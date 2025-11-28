@@ -6,12 +6,14 @@ import { Button } from '../components/ui/button'
 import { Home, Ruler, Moon, Apple, Star, Baby, Droplet, Clock, TrendingUp, Plus, ArrowRight, Crown } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
+import { QuickRecordModals } from '../components/QuickRecordModals'
 
 interface Activity {
   id: string
   timestamp: string
-  type: 'esfinteres'
+  type: 'esfinteres' | 'feeding' | 'sleep' | 'milestone' | 'growth'
   details: any
+  babyName?: string
 }
 
 export default function InicioPage() {
@@ -20,6 +22,7 @@ export default function InicioPage() {
   const [activities, setActivities] = useState<Activity[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isPremium, setIsPremium] = useState<boolean | null>(null)
+  const [openQuickModal, setOpenQuickModal] = useState<'esfinteres' | 'crecimiento' | 'sueno' | 'alimentacion' | 'hitos' | null>(null)
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -46,7 +49,20 @@ export default function InicioPage() {
       const response = await fetch('/api/activities')
       if (response.ok) {
         const data = await response.json()
-        setActivities(data.activities || [])
+        const allActivities = data.activities || []
+        setActivities(allActivities)
+        // Debug: ver qué tipos de actividades tenemos
+        console.log('Actividades cargadas:', {
+          total: allActivities.length,
+          porTipo: {
+            esfinteres: allActivities.filter((a: Activity) => a.type === 'esfinteres').length,
+            feeding: allActivities.filter((a: Activity) => a.type === 'feeding').length,
+            sleep: allActivities.filter((a: Activity) => a.type === 'sleep').length,
+            growth: allActivities.filter((a: Activity) => a.type === 'growth').length,
+            milestone: allActivities.filter((a: Activity) => a.type === 'milestone').length,
+          },
+          todas: allActivities.map((a: Activity) => ({ type: a.type, timestamp: a.timestamp }))
+        })
       }
     } catch (error) {
       console.error('Error cargando actividades:', error)
@@ -74,13 +90,32 @@ export default function InicioPage() {
   tomorrow.setDate(tomorrow.getDate() + 1)
   const todayActivities = activities.filter(act => {
     const actDate = new Date(act.timestamp)
-    return actDate >= today && actDate < tomorrow
+    actDate.setHours(0, 0, 0, 0) // Normalizar la fecha de la actividad
+    return actDate.getTime() === today.getTime()
   })
+  
+  // Debug: ver qué actividades hay hoy
+  console.log('Actividades de hoy:', {
+    total: todayActivities.length,
+    porTipo: {
+      esfinteres: todayActivities.filter((a: Activity) => a.type === 'esfinteres').length,
+      feeding: todayActivities.filter((a: Activity) => a.type === 'feeding').length,
+      sleep: todayActivities.filter((a: Activity) => a.type === 'sleep').length,
+      growth: todayActivities.filter((a: Activity) => a.type === 'growth').length,
+      milestone: todayActivities.filter((a: Activity) => a.type === 'milestone').length,
+    },
+    todas: todayActivities.map((a: Activity) => ({ type: a.type, timestamp: a.timestamp }))
+  })
+  
   const todayStats = {
-    esfinteres: todayActivities.length,
-    pis: todayActivities.filter(a => a.details?.type === 'pipi' || a.details?.type === 'húmedo').length,
-    caca: todayActivities.filter(a => a.details?.type === 'caca' || a.details?.type === 'sucio').length,
-    seco: todayActivities.filter(a => a.details?.type === 'seco').length,
+    esfinteres: todayActivities.filter(a => a.type === 'esfinteres').length,
+    pis: todayActivities.filter(a => a.type === 'esfinteres' && (a.details?.type === 'pipi' || a.details?.type === 'húmedo')).length,
+    caca: todayActivities.filter(a => a.type === 'esfinteres' && (a.details?.type === 'caca' || a.details?.type === 'sucio')).length,
+    seco: todayActivities.filter(a => a.type === 'esfinteres' && a.details?.type === 'seco').length,
+    alimentacion: todayActivities.filter(a => a.type === 'feeding').length,
+    sueno: todayActivities.filter(a => a.type === 'sleep').length,
+    crecimiento: todayActivities.filter(a => a.type === 'growth').length,
+    hitos: todayActivities.filter(a => a.type === 'milestone').length,
   }
 
   // Últimos registros (máximo 5)
@@ -93,6 +128,7 @@ export default function InicioPage() {
     {
       name: 'Crecimiento',
       href: '/dashboard/crecimiento',
+      modalType: 'crecimiento' as const,
       icon: Ruler,
       iconColor: 'text-blue-500',
       description: 'Peso, altura y perímetro cefálico',
@@ -100,6 +136,7 @@ export default function InicioPage() {
     {
       name: 'Sueño',
       href: '/dashboard/sueno',
+      modalType: 'sueno' as const,
       icon: Moon,
       iconColor: 'text-indigo-500',
       description: 'Siestas y horas nocturnas',
@@ -107,6 +144,7 @@ export default function InicioPage() {
     {
       name: 'Alimentación',
       href: '/dashboard/alimentacion',
+      modalType: 'alimentacion' as const,
       icon: Apple,
       iconColor: 'text-green-500',
       description: 'Comidas y tomas',
@@ -114,6 +152,7 @@ export default function InicioPage() {
     {
       name: 'Hitos',
       href: '/dashboard/hitos',
+      modalType: 'hitos' as const,
       icon: Star,
       iconColor: 'text-purple-500',
       description: 'Logros y recuerdos',
@@ -121,9 +160,10 @@ export default function InicioPage() {
     {
       name: 'Chau Pañal',
       href: '/dashboard/esfinteres',
+      modalType: 'esfinteres' as const,
       icon: Baby,
       iconColor: 'text-pink-500',
-      description: 'Control de esfínteres',
+      description: 'Chau Pañal - Control de esfínteres',
     },
   ]
 
@@ -169,60 +209,19 @@ export default function InicioPage() {
       )}
 
       {/* Header */}
-      <div className="mb-6 sm:mb-8">
+      {/* <div className="mb-6 sm:mb-8">
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 dark:text-gray-100 mb-1 sm:mb-2">
           Inicio
         </h1>
         <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
           Resumen del día • {new Date().toLocaleDateString('es', { weekday: 'long', day: 'numeric', month: 'long' })}
         </p>
-      </div>
-
-      {/* Stats del día - Esfínteres */}
-      {todayStats.esfinteres > 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-gradient-to-r from-[#8CCFE0] to-[#E9A5B4] rounded-2xl p-6 shadow-lg mb-8 text-white"
-        >
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <Baby className="text-white" size={32} />
-              <div>
-                <h2 className="text-xl font-bold">Control de Esfínteres</h2>
-                <p className="text-white/80 text-sm">Resumen de hoy</p>
-              </div>
-            </div>
-            <Button
-              onClick={() => router.push('/dashboard/esfinteres')}
-              variant="outline"
-              className="bg-white/20 hover:bg-white/30 text-white border-white/30"
-            >
-              Ver todo
-              <ArrowRight className="ml-2" size={16} />
-            </Button>
-          </div>
-          <div className="grid grid-cols-3 gap-4">
-            <div className="bg-white/20 rounded-lg p-3 text-center backdrop-blur-sm">
-              <p className="text-2xl font-bold">{todayStats.pis}</p>
-              <p className="text-xs text-white/80">Pis</p>
-            </div>
-            <div className="bg-white/20 rounded-lg p-3 text-center backdrop-blur-sm">
-              <p className="text-2xl font-bold">{todayStats.caca}</p>
-              <p className="text-xs text-white/80">Caca</p>
-            </div>
-            <div className="bg-white/20 rounded-lg p-3 text-center backdrop-blur-sm">
-              <p className="text-2xl font-bold">{todayStats.seco}</p>
-              <p className="text-xs text-white/80">Seco</p>
-            </div>
-          </div>
-        </motion.div>
-      )}
+      </div> */}
 
       {/* Accesos Rápidos */}
       <div id="tour-quick-access" className="mb-8">
         <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4">Accesos Rápidos</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-5 gap-2 sm:gap-3">
           {sections.map((section, index) => {
             const Icon = section.icon
             return (
@@ -234,11 +233,11 @@ export default function InicioPage() {
                 whileHover={{ scale: 1.02, y: -5 }}
               >
                 <Button
-                  onClick={() => router.push(section.href)}
-                  className="w-full h-24 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-100 shadow-lg border border-gray-200 dark:border-gray-700 flex flex-col items-center justify-center gap-2"
+                  onClick={() => setOpenQuickModal(section.modalType)}
+                  className="w-full h-20 sm:h-24 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-100 shadow-lg border border-gray-200 dark:border-gray-700 flex flex-col items-center justify-center gap-1 sm:gap-2 px-2 py-1.5"
                   variant="outline"
                 >
-                  <Icon className={section.iconColor} size={28} />
+                  <Icon className={section.iconColor} size={20} />
                   <div className="text-center">
                     <p className="font-semibold text-sm">{section.name}</p>
                     <p className="text-xs text-gray-500 dark:text-gray-400">{section.description}</p>
@@ -250,19 +249,166 @@ export default function InicioPage() {
         </div>
       </div>
 
+      {/* Resumen del día - Todas las actividades */}
+      {(todayStats.esfinteres > 0 || todayStats.alimentacion > 0 || todayStats.sueno > 0 || todayStats.crecimiento > 0 || todayStats.hitos > 0) && (
+        <div className="mb-8 space-y-4">
+          <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">Resumen del día</h2>
+          
+          {/* Esfínteres */}
+          {todayStats.esfinteres > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <Baby className="text-pink-500" size={32} />
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100">Chau Pañal - Control de Esfínteres</h3>
+                    <p className="text-gray-600 dark:text-gray-400 text-sm">{todayStats.esfinteres} registro{todayStats.esfinteres !== 1 ? 's' : ''}</p>
+                  </div>
+                </div>
+                <Button
+                  onClick={() => router.push('/dashboard/esfinteres')}
+                  variant="outline"
+                  className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300"
+                >
+                  Ver todo
+                  <ArrowRight className="ml-2" size={16} />
+                </Button>
+              </div>
+              <div className="grid grid-cols-3 gap-4">
+                <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 text-center">
+                  <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">{todayStats.pis}</p>
+                  <p className="text-xs text-gray-600 dark:text-gray-400">Pis</p>
+                </div>
+                <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 text-center">
+                  <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">{todayStats.caca}</p>
+                  <p className="text-xs text-gray-600 dark:text-gray-400">Caca</p>
+                </div>
+                <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 text-center">
+                  <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">{todayStats.seco}</p>
+                  <p className="text-xs text-gray-600 dark:text-gray-400">Seco</p>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {/* Alimentación */}
+          {todayStats.alimentacion > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Apple className="text-green-500" size={32} />
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100">Alimentación</h3>
+                    <p className="text-gray-600 dark:text-gray-400 text-sm">{todayStats.alimentacion} registro{todayStats.alimentacion !== 1 ? 's' : ''} de hoy</p>
+                  </div>
+                </div>
+                <Button
+                  onClick={() => router.push('/dashboard/alimentacion')}
+                  variant="outline"
+                  className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300"
+                >
+                  Ver todo
+                  <ArrowRight className="ml-2" size={16} />
+                </Button>
+              </div>
+            </motion.div>
+          )}
+
+          {/* Sueño */}
+          {todayStats.sueno > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Moon className="text-indigo-500" size={32} />
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100">Sueño</h3>
+                    <p className="text-gray-600 dark:text-gray-400 text-sm">{todayStats.sueno} registro{todayStats.sueno !== 1 ? 's' : ''} de hoy</p>
+                  </div>
+                </div>
+                <Button
+                  onClick={() => router.push('/dashboard/sueno')}
+                  variant="outline"
+                  className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300"
+                >
+                  Ver todo
+                  <ArrowRight className="ml-2" size={16} />
+                </Button>
+              </div>
+            </motion.div>
+          )}
+
+          {/* Crecimiento */}
+          {todayStats.crecimiento > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Ruler className="text-blue-500" size={32} />
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100">Crecimiento</h3>
+                    <p className="text-gray-600 dark:text-gray-400 text-sm">{todayStats.crecimiento} registro{todayStats.crecimiento !== 1 ? 's' : ''} de hoy</p>
+                  </div>
+                </div>
+                <Button
+                  onClick={() => router.push('/dashboard/crecimiento')}
+                  variant="outline"
+                  className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300"
+                >
+                  Ver todo
+                  <ArrowRight className="ml-2" size={16} />
+                </Button>
+              </div>
+            </motion.div>
+          )}
+
+          {/* Hitos */}
+          {todayStats.hitos > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Star className="text-purple-500" size={32} />
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100">Hitos</h3>
+                    <p className="text-gray-600 dark:text-gray-400 text-sm">{todayStats.hitos} hito{todayStats.hitos !== 1 ? 's' : ''} registrado{todayStats.hitos !== 1 ? 's' : ''} hoy</p>
+                  </div>
+                </div>
+                <Button
+                  onClick={() => router.push('/dashboard/hitos')}
+                  variant="outline"
+                  className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300"
+                >
+                  Ver todo
+                  <ArrowRight className="ml-2" size={16} />
+                </Button>
+              </div>
+            </motion.div>
+          )}
+        </div>
+      )}
+
       {/* Últimos Registros */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">Últimos Registros</h2>
-          <Button
-            onClick={() => router.push('/dashboard/esfinteres')}
-            variant="ghost"
-            size="sm"
-            className="text-gray-600 dark:text-gray-400"
-          >
-            Ver todos
-            <ArrowRight className="ml-2" size={16} />
-          </Button>
         </div>
         {recentActivities.length === 0 ? (
           <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg text-center border border-gray-200 dark:border-gray-700">
@@ -270,7 +416,7 @@ export default function InicioPage() {
             <p className="text-gray-600 dark:text-gray-400 mb-4">Aún no hay registros</p>
             <Button
               id="tour-first-record"
-              onClick={() => router.push('/dashboard/esfinteres/registro')}
+              onClick={() => setOpenQuickModal('esfinteres')}
               className="bg-gradient-to-r from-[#8CCFE0] to-[#E9A5B4] hover:from-[#7CBFD0] hover:to-[#D995A4] text-[#1E293B] dark:text-gray-100"
             >
               <Plus className="mr-2" size={18} />
@@ -280,10 +426,69 @@ export default function InicioPage() {
         ) : (
           <div className="space-y-3">
             {recentActivities.map((activity, index) => {
-              const type = activity.details?.type || 'seco'
-              const isPipi = type === 'pipi' || type === 'húmedo'
-              const isCaca = type === 'caca' || type === 'sucio'
-              const isSeco = type === 'seco'
+              const getActivityInfo = () => {
+                switch (activity.type) {
+                  case 'esfinteres':
+                    const esfinterType = activity.details?.type || 'seco'
+                    const isPipi = esfinterType === 'pipi' || esfinterType === 'húmedo'
+                    const isCaca = esfinterType === 'caca' || esfinterType === 'sucio'
+                    const isSeco = esfinterType === 'seco'
+                    return {
+                      icon: Droplet,
+                      iconBg: isPipi ? 'bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300' :
+                               isCaca ? 'bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300' :
+                               'bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300',
+                      title: isPipi ? 'Pis' : isCaca ? 'Caca' : isSeco ? 'Seco' : esfinterType === 'pipi-caca' ? 'Pis y Caca' : 'Esfínteres',
+                      href: '/dashboard/esfinteres',
+                    }
+                  case 'feeding':
+                    const feedingType = activity.details?.type || 'pecho'
+                    const feedingTypeLabels: Record<string, string> = {
+                      pecho: 'Pecho',
+                      mamadera: 'Mamadera',
+                      solido: 'Sólido',
+                      agua: 'Agua',
+                    }
+                    return {
+                      icon: Apple,
+                      iconBg: 'bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300',
+                      title: feedingTypeLabels[feedingType] || 'Alimentación',
+                      href: '/dashboard/alimentacion',
+                    }
+                  case 'sleep':
+                    const sleepType = activity.details?.type || 'siesta'
+                    return {
+                      icon: Moon,
+                      iconBg: 'bg-indigo-100 dark:bg-indigo-900 text-indigo-600 dark:text-indigo-300',
+                      title: sleepType === 'siesta' ? 'Siesta' : 'Sueño Nocturno',
+                      href: '/dashboard/sueno',
+                    }
+                  case 'growth':
+                    return {
+                      icon: Ruler,
+                      iconBg: 'bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300',
+                      title: 'Crecimiento',
+                      href: '/dashboard/crecimiento',
+                    }
+                  case 'milestone':
+                    return {
+                      icon: Star,
+                      iconBg: 'bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300',
+                      title: activity.details?.title || 'Hito',
+                      href: '/dashboard/hitos',
+                    }
+                  default:
+                    return {
+                      icon: Clock,
+                      iconBg: 'bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-300',
+                      title: 'Registro',
+                      href: '/dashboard',
+                    }
+                }
+              }
+
+              const activityInfo = getActivityInfo()
+              const Icon = activityInfo.icon
               
               return (
                 <motion.div
@@ -291,23 +496,16 @@ export default function InicioPage() {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.05 }}
-                  onClick={() => router.push('/dashboard/esfinteres')}
+                  onClick={() => router.push(activityInfo.href)}
                   className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-md hover:shadow-lg transition-shadow cursor-pointer border border-gray-200 dark:border-gray-700"
                 >
                   <div className="flex items-center gap-4">
-                    <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                      isPipi ? 'bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300' :
-                      isCaca ? 'bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300' :
-                      'bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300'
-                    }`}>
-                      <Droplet size={24} />
+                    <div className={`w-12 h-12 rounded-full flex items-center justify-center ${activityInfo.iconBg}`}>
+                      <Icon size={24} />
                     </div>
                     <div className="flex-1">
                       <p className="font-semibold text-gray-800 dark:text-gray-100">
-                        {isPipi && 'Pis'}
-                        {isCaca && 'Caca'}
-                        {isSeco && 'Seco'}
-                        {type === 'pipi-caca' && 'Pis y Caca'}
+                        {activityInfo.title}
                       </p>
                       <p className="text-sm text-gray-600 dark:text-gray-400">
                         {new Date(activity.timestamp).toLocaleString('es', {
@@ -327,6 +525,14 @@ export default function InicioPage() {
         )}
       </div>
 
+      {/* Modales de registro rápido */}
+      <QuickRecordModals
+        openModal={openQuickModal}
+        onClose={() => setOpenQuickModal(null)}
+        onSuccess={() => {
+          loadActivities()
+        }}
+      />
     </div>
   )
 }

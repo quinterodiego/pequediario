@@ -9,6 +9,11 @@ export function Footer() {
   if (pathname?.startsWith('/dashboard')) {
     return null
   }
+  
+  // Mostrar footer en admin (ya está incluido en el layout de admin)
+  if (pathname?.startsWith('/admin')) {
+    return null
+  }
 
   return (
     <footer className="bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 py-6 mt-12">

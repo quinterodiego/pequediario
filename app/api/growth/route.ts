@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { weight, height, headCircumference, notes, date, time } = body
+    const { weight, height, headCircumference, notes, date, time, timestamp } = body
 
     // Validar que al menos un valor esté presente
     if (!weight && !height && !headCircumference) {
@@ -68,16 +68,25 @@ export async function POST(request: NextRequest) {
     const familyInfo = await GoogleSheetsService.getFamilyInfo(userEmail)
     const babyName = familyInfo.babyName || 'Bebé'
 
-    // Combinar fecha y hora
-    let timestamp = new Date()
-    if (date) {
-      timestamp = new Date(date)
+    // Usar timestamp si viene del cliente, sino construir desde date y time
+    let activityTimestamp: Date
+    if (timestamp) {
+      // Si viene timestamp del cliente, usarlo directamente
+      activityTimestamp = new Date(timestamp)
+    } else if (date) {
+      // Combinar fecha y hora en zona horaria local
+      const [year, month, day] = date.split('-').map(Number)
       if (time) {
-        const [hours, minutes] = time.split(':')
-        timestamp.setHours(parseInt(hours), parseInt(minutes), 0, 0)
+        const [hours, minutes] = time.split(':').map(Number)
+        // Crear fecha directamente en hora local para evitar problemas de UTC
+        activityTimestamp = new Date(year, month - 1, day, hours, minutes, 0, 0)
       } else {
-        timestamp.setHours(timestamp.getHours(), timestamp.getMinutes(), 0, 0)
+        // Si no hay hora, usar la hora actual del día seleccionado
+        const now = new Date()
+        activityTimestamp = new Date(year, month - 1, day, now.getHours(), now.getMinutes(), 0, 0)
       }
+    } else {
+      activityTimestamp = new Date()
     }
 
     // Guardar como actividad de tipo 'growth'
@@ -91,7 +100,7 @@ export async function POST(request: NextRequest) {
         headCircumference: headCircumference ? parseFloat(headCircumference) : null,
         notes: notes || null,
       },
-      timestamp,
+      timestamp: activityTimestamp,
     })
 
     if (!result.success) {

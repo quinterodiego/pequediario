@@ -30,11 +30,12 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
+    <div className="py-8">
       <div className="container mx-auto px-4">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            Panel de Administración
+          <h1 className="text-3xl font-bold mb-2">
+            <span className="bg-gradient-to-r from-[#8CCFE0] to-[#E9A5B4] bg-clip-text text-transparent">Panel de</span>{' '}
+            <span className="text-gray-900 dark:text-white">Administración</span>
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
             Gestiona usuarios, suscripciones y configuración de la aplicación
@@ -74,10 +75,13 @@ export default function AdminPage() {
               <BarChart3 className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">-</div>
-              <p className="text-xs text-muted-foreground">
-                Ver reportes y métricas
-              </p>
+              <Button 
+                onClick={() => router.push('/admin/stats')}
+                className="w-full mt-2 bg-gradient-to-r from-[#8CCFE0] to-[#E9A5B4] hover:from-[#7CBFD0] hover:to-[#D995A4] text-gray-700 dark:text-white"
+                size="sm"
+              >
+                Ver Estadísticas
+              </Button>
             </CardContent>
           </Card>
 
@@ -106,7 +110,7 @@ export default function AdminPage() {
             <CardContent>
               <Button 
                 onClick={() => router.push('/admin/users')}
-                className="w-full"
+                className="w-full bg-gradient-to-r from-[#8CCFE0] to-[#E9A5B4] hover:from-[#7CBFD0] hover:to-[#D995A4] text-gray-700 dark:text-white"
               >
                 Ver Usuarios
               </Button>
@@ -123,8 +127,7 @@ export default function AdminPage() {
             <CardContent>
               <Button 
                 onClick={() => router.push('/admin/premium')}
-                className="w-full"
-                variant="outline"
+                className="w-full bg-[linear-gradient(135deg,#F8D77E,#F2C94C_40%,#D6A63A)] hover:opacity-90 text-white border-2 border-[#D6A63A]"
               >
                 Gestionar Premium
               </Button>

@@ -1,7 +1,7 @@
 'use client'
 
 import { signOut, useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { Button } from './ui/button'
 import { LogOut, Crown, MessageCircle } from 'lucide-react'
 import { LoginModal } from './LoginModal'
@@ -12,7 +12,12 @@ import { ThemeToggle } from './ThemeToggle'
 export function Header() {
   const { data: session, status } = useSession()
   const router = useRouter()
+  const pathname = usePathname()
   const { showLoginModal, showRegisterModal, setShowLoginModal, setShowRegisterModal } = useAuthModal()
+  
+  // Detectar si estamos en dashboard o en alguna de sus subrutas
+  const isDashboardActive = pathname === '/dashboard' || pathname?.startsWith('/dashboard/')
+  const isCommunityActive = pathname === '/community' || pathname?.startsWith('/community/')
 
   if (status === 'loading') {
     return (
@@ -64,7 +69,7 @@ export function Header() {
                   variant="outline"
                   size="sm"
                   onClick={() => router.push('/admin')}
-                  className="hidden sm:flex items-center gap-2 border-blue-500 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 px-2 sm:px-3"
+                  className="hidden sm:flex items-center gap-2 border-[#8CCFE0] text-[#8CCFE0] hover:bg-[#8CCFE0]/10 dark:hover:bg-[#8CCFE0]/20 px-2 sm:px-3"
                 >
                   <span className="text-xs sm:text-sm">Admin</span>
                 </Button>
@@ -85,7 +90,11 @@ export function Header() {
                   variant="ghost" 
                   size="sm"
                   onClick={() => router.push('/dashboard')}
-                  className="text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 px-1.5 sm:px-3"
+                  className={`px-1.5 sm:px-3 transition-all ${
+                    isDashboardActive
+                      ? 'text-[#8CCFE0] dark:text-[#8CCFE0] bg-[#8CCFE0]/15 dark:bg-[#8CCFE0]/25 font-semibold'
+                      : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800'
+                  }`}
                 >
                   <span className="hidden md:inline text-xs sm:text-sm">Dashboard</span>
                   <span className="md:hidden text-xs">Dash</span>
@@ -95,7 +104,11 @@ export function Header() {
                   variant="ghost" 
                   size="sm"
                   onClick={() => router.push('/community')}
-                  className="text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 px-1.5 sm:px-3"
+                  className={`px-1.5 sm:px-3 transition-all ${
+                    isCommunityActive
+                      ? 'text-[#8CCFE0] dark:text-[#8CCFE0] bg-[#8CCFE0]/15 dark:bg-[#8CCFE0]/25 font-semibold'
+                      : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800'
+                  }`}
                 >
                   <MessageCircle size={16} className="sm:mr-1 sm:w-4 sm:h-4" />
                   <span className="hidden sm:inline text-xs sm:text-sm">Comunidad</span>

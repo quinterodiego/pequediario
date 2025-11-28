@@ -24,8 +24,11 @@ export function MainNav() {
         <div className="flex justify-around items-center h-14 sm:h-16">
           {navItems.map((item) => {
             const Icon = item.icon
-            const isActive = pathname === item.path || 
-              (item.path !== '/dashboard' && pathname?.startsWith(item.path))
+            // Para /dashboard, debe ser exactamente igual
+            // Para otras rutas, debe empezar con el path
+            const isActive = item.path === '/dashboard' 
+              ? pathname === '/dashboard' || pathname === '/dashboard/'
+              : pathname?.startsWith(item.path)
             
             return (
               <Button
@@ -33,13 +36,16 @@ export function MainNav() {
                 variant="ghost"
                 size="sm"
                 onClick={() => router.push(item.path)}
-                className={`flex flex-col items-center justify-center gap-0.5 sm:gap-1 h-full w-full rounded-none px-0.5 sm:px-1 ${
+                className={`relative flex flex-col items-center justify-center gap-0.5 sm:gap-1 h-full w-full rounded-none px-0.5 sm:px-1 transition-all ${
                   isActive 
-                    ? 'text-[#8CCFE0] dark:text-[#8CCFE0] bg-[#8CCFE0]/10 dark:bg-[#8CCFE0]/20' 
+                    ? 'text-[#8CCFE0] dark:text-[#8CCFE0] bg-[#8CCFE0]/15 dark:bg-[#8CCFE0]/25 font-semibold' 
                     : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
                 }`}
               >
-                <Icon size={18} className="sm:w-5 sm:h-5" />
+                {isActive && (
+                  <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#8CCFE0] dark:bg-[#8CCFE0] rounded-b-full" />
+                )}
+                <Icon size={18} className={`sm:w-5 sm:h-5 ${isActive ? 'scale-110' : ''} transition-transform`} />
                 <span className="text-[10px] sm:text-xs font-medium leading-tight">{item.label}</span>
               </Button>
             )

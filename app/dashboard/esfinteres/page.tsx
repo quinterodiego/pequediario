@@ -340,7 +340,7 @@ export default function EsfinteresPage() {
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6 sm:mb-8">
         <div className="flex-1 min-w-0">
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2 whitespace-nowrap">
-            Control de Esfínteres
+            Chau Pañal - Control de Esfínteres
           </h1>
           <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
             {isPremium ? (
