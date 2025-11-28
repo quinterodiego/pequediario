@@ -163,7 +163,7 @@ export class GoogleSheetsService {
 
       const rows = response.data.values
       if (!rows || rows.length === 0) {
-        return { exists: false, rowIndex: -1, isPremium: false }
+        return { exists: false, rowIndex: -1, isPremium: false, isAdmin: false }
       }
 
       // Buscar el email del usuario (saltando el header en la fila 0)
