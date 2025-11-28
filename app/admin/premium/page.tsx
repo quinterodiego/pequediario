@@ -220,7 +220,9 @@ export default function PremiumPage() {
                               {user.name || 'Sin nombre'}
                             </h3>
                             {user.isPremium && (
-                              <Crown className="h-4 w-4 text-yellow-500" title="Premium" />
+                              <span title="Premium">
+                                <Crown className="h-4 w-4 text-yellow-500" />
+                              </span>
                             )}
                           </div>
                           <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
