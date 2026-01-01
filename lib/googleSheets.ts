@@ -553,7 +553,7 @@ export class GoogleSheetsService {
     userEmail: string
     originalTimestamp: string // Timestamp original para identificar la actividad
     babyName?: string
-    activityType?: 'feeding' | 'sleep' | 'diaper' | 'milestone' | 'esfinteres'
+    activityType?: 'feeding' | 'sleep' | 'diaper' | 'milestone' | 'esfinteres' | 'growth'
     details?: any
     timestamp?: Date // Nuevo timestamp si se cambia la fecha/hora
   }) {

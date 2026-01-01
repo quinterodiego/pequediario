@@ -17,6 +17,15 @@ export async function PUT(
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
     }
 
+    // Verificar que el usuario sea Premium
+    const isPremium = session.user.isPremium || false
+    if (!isPremium) {
+      return NextResponse.json(
+        { error: 'Esta funcionalidad está disponible solo para usuarios Premium' },
+        { status: 403 }
+      )
+    }
+
     const body = await request.json()
     const { type, details, babyName, timestamp } = body
 
@@ -24,7 +33,7 @@ export async function PUT(
     const originalTimestamp = decodeURIComponent(params.id)
 
     // Validar tipo de actividad si se proporciona
-    if (type && !['feeding', 'sleep', 'diaper', 'milestone', 'esfinteres'].includes(type)) {
+    if (type && !['feeding', 'sleep', 'diaper', 'milestone', 'esfinteres', 'growth'].includes(type)) {
       return NextResponse.json(
         { error: 'Tipo de actividad inválido' },
         { status: 400 }
@@ -75,6 +84,15 @@ export async function DELETE(
     
     if (!session?.user?.email) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
+    }
+
+    // Verificar que el usuario sea Premium
+    const isPremium = session.user.isPremium || false
+    if (!isPremium) {
+      return NextResponse.json(
+        { error: 'Esta funcionalidad está disponible solo para usuarios Premium' },
+        { status: 403 }
+      )
     }
 
     // Decodificar el ID (timestamp original)

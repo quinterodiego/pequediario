@@ -22,9 +22,11 @@ export default function CrecimientoPage() {
   const router = useRouter()
   const [growthRecords, setGrowthRecords] = useState<GrowthRecord[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [isPremium, setIsPremium] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [editingRecord, setEditingRecord] = useState<GrowthRecord | null>(null)
+  const [deletingRecord, setDeletingRecord] = useState<GrowthRecord | null>(null)
   const [formData, setFormData] = useState({
     weight: '',
     height: '',
@@ -41,6 +43,7 @@ export default function CrecimientoPage() {
     }
 
     if (status === 'authenticated' && session?.user) {
+      setIsPremium(session.user.isPremium || false)
       loadRecords()
     }
   }, [status, session, router])
@@ -115,6 +118,11 @@ export default function CrecimientoPage() {
       return
     }
 
+    if (editingRecord && !isPremium) {
+      alert('Solo los usuarios Premium pueden editar registros')
+      return
+    }
+
     try {
       setIsSaving(true)
       
@@ -125,27 +133,90 @@ export default function CrecimientoPage() {
         height: formData.height ? parseNumberAR(formData.height)?.toString() || '' : '',
         headCircumference: formData.headCircumference ? parseNumberAR(formData.headCircumference)?.toString() || '' : '',
       }
-      
-      const response = await fetch('/api/growth', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(submitData),
-      })
 
-      if (response.ok) {
-        handleCloseModal()
-        loadRecords()
+      // Si estamos editando, usar PUT en /api/activities/[id]
+      if (editingRecord) {
+        const [hours, minutes] = formData.time.split(':')
+        const newTimestamp = new Date(formData.date)
+        newTimestamp.setHours(parseInt(hours), parseInt(minutes), 0, 0)
+
+        const timestamp = encodeURIComponent(editingRecord.timestamp)
+        const response = await fetch(`/api/activities/${timestamp}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            type: 'growth',
+            details: {
+              weight: submitData.weight ? parseFloat(submitData.weight) : null,
+              height: submitData.height ? parseFloat(submitData.height) : null,
+              headCircumference: submitData.headCircumference ? parseFloat(submitData.headCircumference) : null,
+              notes: submitData.notes || null,
+            },
+            timestamp: newTimestamp.toISOString(),
+          }),
+        })
+
+        if (response.ok) {
+          handleCloseModal()
+          loadRecords()
+        } else {
+          const data = await response.json()
+          alert(data.error || 'Error al actualizar el registro')
+        }
       } else {
-        const data = await response.json()
-        alert(data.error || 'Error al guardar el registro')
+        // Si es nuevo registro, usar POST
+        const response = await fetch('/api/growth', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(submitData),
+        })
+
+        if (response.ok) {
+          handleCloseModal()
+          loadRecords()
+        } else {
+          const data = await response.json()
+          alert(data.error || 'Error al guardar el registro')
+        }
       }
     } catch (error) {
       console.error('Error guardando registro:', error)
       alert('Error al guardar el registro')
     } finally {
       setIsSaving(false)
+    }
+  }
+
+  const handleDelete = async (record: GrowthRecord) => {
+    if (!isPremium) {
+      alert('Solo los usuarios Premium pueden eliminar registros')
+      return
+    }
+
+    if (!confirm('¿Estás seguro de que quieres eliminar este registro? Esta acción no se puede deshacer.')) {
+      return
+    }
+
+    try {
+      const timestamp = encodeURIComponent(record.timestamp)
+      const response = await fetch(`/api/activities/${timestamp}`, {
+        method: 'DELETE',
+      })
+
+      if (response.ok) {
+        loadRecords()
+        setDeletingRecord(null)
+      } else {
+        const data = await response.json()
+        alert(data.error || 'Error al eliminar el registro')
+      }
+    } catch (error) {
+      console.error('Error eliminando registro:', error)
+      alert('Error al eliminar el registro')
     }
   }
 
@@ -387,13 +458,29 @@ export default function CrecimientoPage() {
                       <p className="text-sm text-gray-600 mt-2 italic">"{record.notes}"</p>
                     )}
                   </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => handleOpenModal(record)}
-                  >
-                    <Edit size={16} />
-                  </Button>
+                  {isPremium ? (
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleOpenModal(record)}
+                      >
+                        <Edit size={16} />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleDelete(record)}
+                        className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                      >
+                        <Trash2 size={16} />
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="text-xs text-gray-400 text-center">
+                      Premium
+                    </div>
+                  )}
                 </div>
               </motion.div>
             ))}

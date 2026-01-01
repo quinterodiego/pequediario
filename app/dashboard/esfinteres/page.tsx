@@ -1085,33 +1085,49 @@ export default function EsfinteresPage() {
                   </div>
                 </div>
 
-                <div className="flex gap-3 pt-4">
-                  <Button
-                    onClick={() => {
-                      const activityDate = new Date(selectedActivity.timestamp)
-                      setEditForm({
-                        type: selectedActivity.details?.type || 'pipi',
-                        notes: selectedActivity.details?.notes || '',
-                        date: activityDate.toISOString().split('T')[0],
-                        time: `${String(activityDate.getHours()).padStart(2, '0')}:${String(activityDate.getMinutes()).padStart(2, '0')}`,
-                      })
-                      setIsEditing(true)
-                    }}
-                    variant="outline"
-                    className="flex-1"
-                  >
-                    <Edit className="mr-2" size={16} />
-                    Editar
-                  </Button>
-                  <Button
-                    onClick={() => setIsDeleting(true)}
-                    variant="outline"
-                    className="flex-1 text-red-600 border-red-300 hover:bg-red-50"
-                  >
-                    <Trash2 className="mr-2" size={16} />
-                    Eliminar
-                  </Button>
-                </div>
+                {isPremium ? (
+                  <div className="flex gap-3 pt-4">
+                    <Button
+                      onClick={() => {
+                        const activityDate = new Date(selectedActivity.timestamp)
+                        setEditForm({
+                          type: selectedActivity.details?.type || 'pipi',
+                          notes: selectedActivity.details?.notes || '',
+                          date: activityDate.toISOString().split('T')[0],
+                          time: `${String(activityDate.getHours()).padStart(2, '0')}:${String(activityDate.getMinutes()).padStart(2, '0')}`,
+                        })
+                        setIsEditing(true)
+                      }}
+                      variant="outline"
+                      className="flex-1"
+                    >
+                      <Edit className="mr-2" size={16} />
+                      Editar
+                    </Button>
+                    <Button
+                      onClick={() => setIsDeleting(true)}
+                      variant="outline"
+                      className="flex-1 text-red-600 border-red-300 hover:bg-red-50"
+                    >
+                      <Trash2 className="mr-2" size={16} />
+                      Eliminar
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="pt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                    <p className="text-sm text-yellow-800 mb-2">
+                      <strong>Funcionalidad Premium:</strong> Actualiza a Premium para poder editar y eliminar registros.
+                    </p>
+                    <Button
+                      onClick={() => router.push('/premium')}
+                      variant="outline"
+                      size="sm"
+                      className="w-full border-yellow-300 text-yellow-700 hover:bg-yellow-100"
+                    >
+                      Ver Premium
+                    </Button>
+                  </div>
+                )}
                 <Button
                   onClick={() => {
                     setSelectedActivity(null)
